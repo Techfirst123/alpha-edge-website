@@ -1,0 +1,199 @@
+/* Light themed background for the "What We Do" section (Home).
+   Compound selector so it reliably wins over .section-alt's white bg. */
+.section-alt.services-section {
+  background: linear-gradient(180deg, #f5f6f8 0%, #eceef1 100%);
+}
+
+/* ---- Flip card: the whole card is a <Link>, so it's clickable on both faces ---- */
+.svc-flip {
+  display: block;
+  position: relative;
+  min-height: 250px;
+  perspective: 1600px;
+  text-decoration: none;
+  color: inherit;
+  /* scroll-reveal from a resting state */
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.5s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.svc-flip--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.svc-flip__inner {
+  position: relative;
+  width: 100%;
+  min-height: 250px;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+
+/* Flip on hover (pointer devices). Whole card lifts a touch, then rotates. */
+@media (hover: hover) and (pointer: fine) {
+  .svc-flip:hover {
+    transform: translateY(-6px);
+  }
+  .svc-flip:hover .svc-flip__inner,
+  .svc-flip:focus-visible .svc-flip__inner {
+    transform: rotateY(180deg);
+  }
+  .svc-flip:hover .svc-flip__hint {
+    opacity: 0;
+  }
+}
+
+.svc-flip:focus-visible {
+  outline: none;
+}
+.svc-flip:focus-visible .svc-flip__front {
+  box-shadow: 0 0 0 3px rgba(63, 69, 78, 0.28), 0 10px 28px rgba(23, 38, 74, 0.12);
+}
+
+.svc-flip__face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 28px 26px;
+  border-radius: 16px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.svc-flip__front {
+  background: var(--white);
+  border: 1px solid rgba(23, 38, 74, 0.08);
+  box-shadow: 0 6px 20px rgba(23, 38, 74, 0.06);
+  justify-content: flex-start;
+}
+
+.svc-flip__back {
+  background: linear-gradient(155deg, var(--navy-800) 0%, var(--navy-900) 100%);
+  color: rgba(255, 255, 255, 0.9);
+  transform: rotateY(180deg);
+  justify-content: center;
+  box-shadow: 0 18px 36px rgba(23, 38, 74, 0.3);
+}
+
+.svc-flip__icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gradient-brand);
+  color: var(--white);
+  font-size: 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 18px rgba(63, 69, 78, 0.28);
+}
+
+.svc-flip__icon--back {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--cyan-300);
+  box-shadow: none;
+}
+
+.svc-flip__title {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.svc-flip__front .svc-flip__title {
+  color: var(--navy-800);
+}
+.svc-flip__back .svc-flip__title {
+  color: #fff;
+}
+
+.svc-flip__desc {
+  font-size: 14.5px;
+  line-height: 1.6;
+  margin-bottom: 18px;
+}
+.svc-flip__front .svc-flip__desc {
+  color: var(--muted);
+}
+.svc-flip__back .svc-flip__desc {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.svc-flip__link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+}
+.svc-flip__front .svc-flip__link {
+  color: var(--blue-600);
+}
+.svc-flip__back .svc-flip__link {
+  color: var(--cyan-300);
+}
+.svc-flip__link svg {
+  font-size: 13px;
+  transition: transform 0.25s ease;
+}
+.svc-flip:hover .svc-flip__link svg {
+  transform: translateX(5px);
+}
+
+/* rotate hint, top-right on the front */
+.svc-flip__hint {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(63, 69, 78, 0.08);
+  color: var(--blue-600);
+  font-size: 13px;
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+/* Touch / no-hover devices: no flip — show the front as a clean static card
+   (all info is on the front, so nothing is lost). */
+@media not all and (hover: hover) and (pointer: fine) {
+  .svc-flip,
+  .svc-flip__inner {
+    min-height: 0;
+  }
+  .svc-flip__inner {
+    transform: none !important;
+  }
+  .svc-flip__face {
+    position: static;
+    backface-visibility: visible;
+  }
+  .svc-flip__back {
+    display: none;
+  }
+  .svc-flip__hint {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-flip {
+    opacity: 1;
+    transform: none;
+  }
+  .svc-flip__inner {
+    transition: none;
+  }
+}

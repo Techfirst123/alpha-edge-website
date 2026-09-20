@@ -1,0 +1,36 @@
+{
+  "name": "alpha-edge-website",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:cf": "wrangler pages dev --proxy 5173 -- npm run dev",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "seed": "node --env-file=.env scripts/seed.js",
+    "deploy": "npm run build && wrangler pages deploy dist"
+  },
+  "browser": {
+    "bson": "./node_modules/bson/lib/bson.node.mjs"
+  },
+  "dependencies": {
+    "axios": "^1.19.0",
+    "exceljs": "^4.4.0",
+    "framer-motion": "^13.1.0",
+    "mongodb": "^7.6.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-icons": "^5.7.0",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "oxlint": "^1.75.0",
+    "vite": "^8.2.0",
+    "wrangler": "^4.135.0"
+  }
+}

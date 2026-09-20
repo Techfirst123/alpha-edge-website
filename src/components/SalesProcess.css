@@ -1,0 +1,148 @@
+.sales-process {
+  background: var(--bg);
+}
+
+.sales-process__head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 48px;
+}
+
+.sales-process__head .eyebrow {
+  margin-bottom: 12px;
+}
+
+.sales-process__head .section-heading {
+  margin: 0 auto;
+}
+
+.sales-process__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.sales-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 34px 24px 30px;
+  background: var(--white);
+  border: 1px solid rgba(23, 38, 74, 0.08);
+  border-radius: 18px;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.25s ease,
+    border-color 0.25s ease, opacity 0.5s ease;
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.sales-card--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sales-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-soft);
+  border-color: rgba(63, 69, 78, 0.22);
+}
+
+.sales-card__icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 23px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 22px rgba(20, 23, 28, 0.22);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.sales-card:hover .sales-card__icon {
+  transform: scale(1.06);
+  box-shadow: 0 14px 30px rgba(228, 146, 46, 0.42);
+}
+
+.sales-card:hover .icon-flip__inner {
+  transform: rotateY(180deg);
+}
+
+.sales-card__title {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: 21px;
+  color: var(--navy-800);
+  margin-bottom: 12px;
+}
+
+.sales-card__text {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.sales-card__btn {
+  position: relative;
+  margin-top: auto;
+  padding: 11px 22px;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+/* Premium "slide-replace" label: face 1 exits to the right while an
+   identical face 2 enters from the left, so the button itself never
+   moves or empties — only its label content travels. */
+.sales-card__btn-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sales-card__btn-face--1 {
+  transform: translateX(0);
+}
+
+.sales-card__btn-face--2 {
+  position: absolute;
+  inset: 0;
+  justify-content: center;
+  transform: translateX(-200%);
+}
+
+.sales-card:hover .sales-card__btn-face--1 {
+  transform: translateX(200%);
+}
+
+.sales-card:hover .sales-card__btn-face--2 {
+  transform: translateX(0);
+}
+
+.sales-card__btn svg {
+  font-size: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sales-card__btn-face {
+    transition: none;
+  }
+  .sales-card__btn-face--2 {
+    display: none;
+  }
+}
+
+/* Responsive: 4 -> 2 -> 1 */
+@media (max-width: 1000px) {
+  .sales-process__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .sales-process__grid {
+    grid-template-columns: 1fr;
+  }
+}

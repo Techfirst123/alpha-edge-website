@@ -1,0 +1,142 @@
+.footer {
+  position: relative;
+  background: linear-gradient(180deg, var(--navy-800) 0%, var(--footer-navy) 100%);
+  color: var(--footer-text);
+  padding-top: 72px;
+  overflow: hidden;
+}
+
+.footer > * {
+  position: relative;
+  z-index: 1;
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 40px;
+  padding-bottom: 56px;
+}
+
+.footer__brand img {
+  height: 68px;
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: white;
+  padding: 6px 10px;
+  margin-bottom: 18px;
+}
+
+.footer__about {
+  color: var(--footer-text);
+  font-size: 14.5px;
+  max-width: 320px;
+}
+
+.footer__socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.footer__socials a {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--footer-slate);
+  color: white;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.footer__socials a:hover {
+  background: var(--blue-600);
+  color: white;
+  transform: translateY(-3px);
+}
+
+.footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer__col h4 {
+  font-family: "Rajdhani", sans-serif;
+  color: white;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.footer__col a,
+.footer__col span {
+  color: var(--footer-text);
+  font-size: 14.5px;
+  transition: color 0.2s ease;
+}
+
+.footer__col a:hover {
+  color: var(--blue-400);
+}
+
+.footer__contact-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  line-height: 1.5;
+}
+
+.footer__contact-line svg {
+  margin-top: 3px;
+  flex-shrink: 0;
+  color: var(--blue-400);
+}
+
+.footer__address-label {
+  color: white;
+  font-weight: 600;
+}
+
+.footer__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 20px 0;
+}
+
+.footer__bottom-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.6);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer__tagline {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--blue-400);
+}
+
+@media (max-width: 900px) {
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .footer__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .footer__bottom-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

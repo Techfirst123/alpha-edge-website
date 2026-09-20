@@ -1,0 +1,26 @@
+.services-cta {
+  background: var(--bg);
+}
+
+.services-cta__inner {
+  background: var(--gradient-brand);
+  border-radius: 24px;
+  padding: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.services-cta__inner h2 {
+  color: white;
+  font-size: 26px;
+  margin-bottom: 8px;
+  max-width: 480px;
+}
+
+.services-cta__inner p {
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 440px;
+}

@@ -1,0 +1,65 @@
+.import-hint {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.import-hint code {
+  background: rgba(63, 69, 78, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+}
+
+.import-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg);
+  border: 1.5px dashed rgba(20, 23, 28, 0.25);
+  border-radius: var(--radius);
+  padding: 16px 22px;
+  cursor: pointer;
+  font-size: 14.5px;
+  color: var(--ink);
+  transition: border-color 0.2s ease;
+}
+
+.import-upload:hover {
+  border-color: var(--blue-600);
+}
+
+.import-upload svg {
+  font-size: 20px;
+  color: #1a7f4b;
+  flex-shrink: 0;
+}
+
+.import-upload input[type="file"] {
+  display: none;
+}
+
+.import-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.import-result {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.import-result__summary {
+  margin-bottom: 6px;
+}
+
+.import-result__errors {
+  margin: 0;
+  padding-left: 20px;
+  color: #b3261e;
+  font-size: 13.5px;
+}

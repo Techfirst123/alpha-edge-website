@@ -1,0 +1,202 @@
+/* =========================================
+   TOP PRODUCTS SLIDER
+========================================= */
+
+.top-products__slider {
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 0 18px;
+}
+
+/* Moving row */
+.top-products__track {
+  display: flex;
+  width: max-content;
+  gap: 18px;
+
+  animation: topProductsSlide 25s linear infinite;
+
+  will-change: transform;
+}
+
+/* Pause animation when mouse is over slider */
+.top-products__slider--paused .top-products__track {
+  animation-play-state: paused;
+}
+
+/* =========================================
+   PRODUCT TILE
+========================================= */
+
+.top-products__tile {
+  position: relative;
+  display: block;
+
+  flex: 0 0 180px;
+
+  aspect-ratio: 1 / 1;
+
+  border-radius: 14px;
+  overflow: hidden;
+
+  background: var(--white);
+
+  border: 1px solid rgba(23, 38, 74, 0.08);
+
+  box-shadow: 0 6px 18px rgba(23, 38, 74, 0.06);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.top-products__tile:hover {
+  transform: translateY(-4px);
+
+  box-shadow: 0 14px 30px rgba(23, 38, 74, 0.14);
+
+  border-color: var(--blue-500);
+}
+
+/* Product image */
+
+.top-products__tile img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+}
+
+/* Fallback */
+
+.top-products__tile-fallback {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
+
+  padding: 16px;
+
+  text-align: center;
+
+  font-family: "Rajdhani", sans-serif;
+
+  font-weight: 600;
+  font-size: 14px;
+
+  color: var(--muted);
+}
+
+/* =========================================
+   INFINITE AUTO SLIDE
+========================================= */
+
+@keyframes topProductsSlide {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 9px));
+  }
+}
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.top-products__empty {
+  text-align: center;
+
+  padding: 48px 24px;
+
+  background: var(--white);
+
+  border: 1px dashed #d7dce4;
+
+  border-radius: 14px;
+
+  color: var(--muted);
+
+  max-width: 640px;
+
+  margin: 0 auto 40px;
+}
+
+/* =========================================
+   MORE BUTTON
+========================================= */
+
+.top-products__more {
+  text-align: center;
+
+  margin-top: 32px;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+  .top-products__tile {
+    flex-basis: 145px;
+  }
+
+  .top-products__track {
+    gap: 16px;
+
+    animation-duration: 22s;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 640px) {
+  .top-products__slider {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .top-products__track {
+    gap: 12px;
+
+    animation-duration: 18s;
+  }
+
+  .top-products__tile {
+    
+    flex-basis: 120px;
+
+    border-radius: 12px;
+  }
+
+  .top-products__tile img {
+    
+    padding: 12px;
+  }
+
+  .top-products__more {
+    margin-top: 24px;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .top-products__track {
+    animation: none;
+  }
+
+  .top-products__tile {
+    transition: none;
+  }
+}

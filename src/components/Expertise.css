@@ -1,0 +1,215 @@
+.expertise {
+  background: var(--white);
+}
+
+.expertise__head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 48px;
+}
+
+.expertise__head .eyebrow {
+  margin-bottom: 12px;
+}
+
+.expertise__head .section-heading {
+  margin: 0 auto;
+}
+
+.expertise__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+/* ---- Tile: full-bleed image, bottom scrim, overlaid caption ---- */
+.exp-tile {
+  position: relative;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(23, 38, 74, 0.08);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.45s ease,
+    border-color 0.45s ease;
+}
+
+.exp-tile:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 48px rgba(20, 23, 28, 0.22);
+  border-color: rgba(228, 146, 46, 0.35);
+}
+
+/* Diagonal shine sweep — plays once across the tile on hover */
+.exp-tile::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -30%;
+  width: 35%;
+  height: 220%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.32) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg) translateX(-60%);
+  opacity: 0;
+}
+
+.exp-tile:hover::after {
+  opacity: 1;
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.15s ease;
+  transform: skewX(-18deg) translateX(340%);
+}
+
+.exp-tile__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.3, 1);
+  z-index: 0;
+}
+
+/* Themed charcoal fallback when no photo is present */
+.exp-tile--placeholder {
+  background: var(--gradient-brand);
+}
+
+.exp-tile__icon {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--amber);
+  font-size: 20px;
+  backdrop-filter: blur(2px);
+  transition: background 0.35s ease, color 0.35s ease, transform 0.35s ease;
+}
+
+.exp-tile:hover .exp-tile__icon {
+  background: var(--amber);
+  color: var(--ink);
+  transform: scale(1.1) rotate(-6deg);
+}
+
+/* Dark gradient scrim so white text always reads (WCAG) */
+.exp-tile__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 23, 28, 0.15) 0%,
+    rgba(20, 23, 28, 0.35) 45%,
+    rgba(20, 23, 28, 0.9) 100%
+  );
+  transition: background 0.35s ease;
+}
+
+.exp-tile--placeholder .exp-tile__scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(20, 23, 28, 0) 0%,
+    rgba(20, 23, 28, 0.25) 45%,
+    rgba(20, 23, 28, 0.75) 100%
+  );
+}
+
+.exp-tile__body {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  padding: 22px 22px 24px;
+}
+
+.exp-tile__title {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: 19px;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 7px;
+}
+
+.exp-tile__text {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.exp-tile:hover .exp-tile__text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Touch devices have no reliable hover — keep the copy visible */
+@media (hover: none) {
+  .exp-tile__text {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Hover: zoom image, deepen scrim */
+.exp-tile:hover .exp-tile__img {
+  transform: scale(1.09);
+}
+
+.exp-tile:hover .exp-tile__scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(20, 23, 28, 0.25) 0%,
+    rgba(20, 23, 28, 0.5) 45%,
+    rgba(20, 23, 28, 0.95) 100%
+  );
+}
+
+/* Responsive: 3 -> 2 -> 1 */
+@media (max-width: 1000px) {
+  .expertise__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .expertise__grid {
+    grid-template-columns: 1fr;
+  }
+  .exp-tile {
+    height: 260px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exp-tile,
+  .exp-tile__img,
+  .exp-tile__icon,
+  .exp-tile__text {
+    transition: none;
+  }
+  .exp-tile::after {
+    display: none;
+  }
+  .exp-tile__text {
+    opacity: 1;
+    transform: none;
+  }
+}

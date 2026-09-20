@@ -1,0 +1,288 @@
+.about-editorial {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.about-editorial__text {
+  font-size: 16.5px;
+  margin: 20px 0 32px;
+}
+
+.about-editorial__visual {
+  position: relative;
+}
+
+.about-editorial__frame {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.about-editorial__frame img {
+  width: 100%;
+  height: 440px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.about-editorial__visual:hover .about-editorial__frame img {
+  transform: scale(1.06);
+}
+
+.about-editorial__stat {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 16px 22px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(4, 18, 42, 0.06);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.about-editorial__visual:hover .about-editorial__stat {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 34px rgba(228, 146, 46, 0.28);
+  border-color: rgba(228, 146, 46, 0.4);
+}
+
+.about-editorial__stat span {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--blue-600);
+}
+
+.about-editorial__stat small {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--navy-800);
+  letter-spacing: 0.02em;
+}
+
+.about-editorial__stat--top {
+  top: -24px;
+  left: -24px;
+}
+
+.about-editorial__stat--bottom {
+  bottom: -24px;
+  right: -24px;
+}
+
+.why-us {
+  padding-top: 40px;
+}
+
+.why-us__eyebrow {
+  margin-top: 56px;
+}
+
+.about-mv {
+  margin-top: 8px;
+}
+
+.about-mv__card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 30px;
+  border: 1px solid rgba(4, 18, 42, 0.06);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.about-mv__card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 44px rgba(20, 23, 28, 0.16);
+  border-color: rgba(228, 146, 46, 0.35);
+}
+
+.about-mv__card svg {
+  font-size: 26px;
+  color: var(--blue-600);
+  margin-bottom: 14px;
+  display: block;
+  transition: color 0.35s ease, transform 0.35s ease;
+}
+
+.about-mv__card:hover svg {
+  color: var(--amber);
+  transform: scale(1.15) rotate(-6deg);
+}
+
+.about-mv__card h3 {
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+
+.why-us__item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 14.5px;
+  color: var(--navy-800);
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.why-us__item::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--amber);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.why-us__item:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+.why-us__item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-soft);
+}
+
+.why-us__item svg {
+  color: var(--blue-600);
+  font-size: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.35s ease;
+}
+
+.why-us__item:hover svg {
+  color: var(--amber-600);
+  transform: scale(1.2);
+}
+
+.team-card {
+  text-align: center;
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 34px 26px;
+  border: 1px solid rgba(4, 18, 42, 0.06);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease,
+    background 0.4s ease, border-color 0.4s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-soft);
+  background: var(--white);
+  border-color: rgba(228, 146, 46, 0.3);
+}
+
+.team-card__avatar {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  background: var(--gradient-brand);
+  color: var(--cyan-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease;
+}
+
+.team-card:hover .team-card__avatar {
+  transform: scale(1.08) rotate(-4deg);
+  box-shadow: 0 14px 28px rgba(228, 146, 46, 0.4);
+}
+
+.team-card h3 {
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.team-card__role {
+  display: block;
+  color: var(--blue-600);
+  font-size: 13.5px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.team-card p {
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .about-editorial {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .about-editorial__visual {
+    order: -1;
+    margin: 0 12px 24px;
+  }
+
+  .about-editorial__frame img {
+    height: 320px;
+  }
+
+  .about-editorial__stat {
+    padding: 12px 16px;
+  }
+
+  .about-editorial__stat--top {
+    top: -16px;
+    left: -12px;
+  }
+
+  .about-editorial__stat--bottom {
+    bottom: -16px;
+    right: -12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-editorial__visual {
+    margin: 0 0 36px;
+  }
+
+  .about-editorial__stat span {
+    font-size: 20px;
+  }
+
+  .about-editorial__stat small {
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-editorial__frame img,
+  .about-editorial__stat,
+  .about-mv__card,
+  .about-mv__card svg,
+  .why-us__item,
+  .why-us__item svg,
+  .why-us__item::before,
+  .team-card,
+  .team-card__avatar {
+    transition: none;
+  }
+}

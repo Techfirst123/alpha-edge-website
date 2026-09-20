@@ -1,0 +1,52 @@
+.stat-bar {
+  background: var(--navy-900);
+  margin-top: -1px;
+}
+
+.stat-bar__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 40px 24px;
+}
+
+.stat-bar__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-bar__item:last-child {
+  border-right: none;
+}
+
+.stat-bar__value {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.stat-bar__label {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: "Rajdhani", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 700px) {
+  .stat-bar__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 0;
+  }
+  .stat-bar__item:nth-child(2) {
+    border-right: none;
+  }
+}

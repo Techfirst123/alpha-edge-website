@@ -1,0 +1,142 @@
+.contact-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 56px;
+}
+
+.contact-info h2 {
+  font-size: 26px;
+  margin-bottom: 14px;
+}
+
+.contact-info__intro {
+  margin-bottom: 32px;
+}
+
+.contact-info__item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 26px;
+}
+
+.contact-info__item svg {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--gradient-brand);
+  color: var(--cyan-300);
+  padding: 12px;
+  flex-shrink: 0;
+}
+
+.contact-info__item div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.contact-info__label {
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--navy-900);
+}
+
+.contact-form {
+  background: var(--bg);
+  border-radius: var(--radius);
+  padding: 36px;
+  border: 1px solid rgba(4, 18, 42, 0.06);
+}
+
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.contact-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.contact-form__field label {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--navy-800);
+}
+
+.contact-form__field input,
+.contact-form__field textarea {
+  border: 1.5px solid rgba(4, 18, 42, 0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: "Nunito", sans-serif;
+  font-size: 14.5px;
+  background: white;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  resize: vertical;
+}
+
+.contact-form__field input:focus,
+.contact-form__field textarea:focus {
+  outline: none;
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 3px rgba(63, 69, 78, 0.15);
+}
+
+.contact-form__submit {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.contact-form__notice {
+  margin-top: 16px;
+  font-size: 14px;
+  font-family: "Rajdhani", sans-serif;
+}
+
+.contact-form__notice--success {
+  color: #0a8a4b;
+}
+
+.contact-form__notice--error {
+  color: #c0392b;
+}
+
+.contact-map {
+  padding: 0 0 96px;
+}
+
+.contact-map__placeholder {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.contact-map__placeholder span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 260px;
+  border-radius: var(--radius);
+  background: var(--bg);
+  border: 1.5px dashed rgba(4, 18, 42, 0.15);
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 0 24px;
+}
+
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .contact-form__row {
+    grid-template-columns: 1fr;
+  }
+}

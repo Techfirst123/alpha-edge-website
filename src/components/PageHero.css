@@ -1,0 +1,144 @@
+.page-hero {
+  position: relative;
+  background: var(--gradient-brand);
+  padding: 100px 0 64px;
+  overflow: hidden;
+}
+
+.page-hero__glow {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: var(--blue-500);
+  filter: blur(100px);
+  opacity: 0.3;
+  top: -140px;
+  right: -100px;
+}
+
+/* Banner mode: the marketing graphic fills the hero and the page's own
+   eyebrow/title/subtitle sits directly on top of it, bottom-anchored, over
+   a gradient that deepens into the artwork's own dark base — one unified
+   visual instead of an image plus a separate text bar. */
+.page-hero--banner {
+  padding: 0;
+}
+
+.page-hero__banner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #04101f;
+}
+
+.page-hero__banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.page-hero__banner:hover img {
+  transform: scale(1.035);
+}
+
+.page-hero__banner-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(2, 7, 16, 0.98) 0%,
+    rgba(2, 7, 16, 0.96) 40%,
+    rgba(2, 7, 16, 0.78) 58%,
+    rgba(2, 7, 16, 0.32) 78%,
+    rgba(2, 7, 16, 0) 96%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.page-hero__banner:hover .page-hero__banner-scrim {
+  opacity: 1;
+}
+
+.page-hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.page-hero--banner .page-hero__banner .container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding-bottom: clamp(22px, 4vw, 40px);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.page-hero__banner:hover .container {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Touch devices have no reliable hover — the page title must stay visible
+   so a first-time visitor on mobile can still tell what page this is. */
+@media (hover: none) {
+  .page-hero__banner-scrim,
+  .page-hero--banner .page-hero__banner .container {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-hero h1 {
+  color: white;
+  font-family: "Rajdhani", sans-serif;
+  font-size: clamp(30px, 4.5vw, 48px);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.page-hero p {
+  color: rgba(255, 255, 255, 0.75);
+  max-width: 600px;
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  .page-hero {
+    padding: 88px 0 48px;
+  }
+
+  .page-hero--banner {
+    padding: 0;
+  }
+}
+
+/* Below tablet width the banner's natural aspect ratio no longer leaves
+   enough height for the overlaid text. Cropping to fill a taller box would
+   zoom into the busiest part of the artwork (the wordmark), so instead the
+   full image stays uncropped at its natural height and the frame grows
+   taller beneath it — that extra strip is the same dark base colour the
+   scrim fades into, so it reads as one continuous fade, not a hard seam. */
+@media (max-width: 780px) {
+  .page-hero__banner {
+    min-height: 360px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-hero__banner {
+    min-height: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-hero__banner img {
+    transition: none;
+  }
+}

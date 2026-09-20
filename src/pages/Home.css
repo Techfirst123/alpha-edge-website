@@ -1,0 +1,23 @@
+/* CTA */
+.cta {
+  background: var(--gradient-brand);
+  padding: 64px 0;
+}
+
+.cta__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cta__inner h2 {
+  color: white;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.cta__inner p {
+  color: rgba(255, 255, 255, 0.7);
+}
