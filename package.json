@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:cf": "wrangler pages dev --proxy 5173 -- npm run dev",
+    "dev:cf": "wrangler dev --proxy 5173 -- npm run dev",
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
     "seed": "node --env-file=.env scripts/seed.js",
-    "deploy": "npm run build && wrangler pages deploy dist"
+    "deploy": "npm run build && wrangler deploy"
   },
   "browser": {
     "bson": "./node_modules/bson/lib/bson.node.mjs"
