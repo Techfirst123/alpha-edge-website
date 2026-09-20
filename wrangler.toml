@@ -1,4 +1,4 @@
-name = "alpha-edge-website"
+name = "alphaedgeitservices"
 pages_build_output_dir = "dist"
 compatibility_date = "2025-09-01"
 compatibility_flags = ["nodejs_compat"]
