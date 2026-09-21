@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBullseye, FaEye, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import PageHero from "../components/PageHero";
-// Black 3D signage version of the logo — the flat banner lockup now lives on
-// the home hero, so About uses the dimensional treatment instead.
-import aboutHeroBg from "../assets/about/ae-logo-3d.jpg";
 import aboutEditorial from "../assets/about/editorial-team.webp";
 import { getAboutContent, getHomepageContent, getTeam } from "../api/client";
 import { placeholderAbout, placeholderHome, placeholderTeam } from "../data/placeholder";
 import "./About.css";
+
+// Black 3D signage version of the logo — the flat banner lockup now lives on
+// the home hero, so About uses the dimensional treatment instead.
+// Served from public/about/ as a plain URL rather than imported, so the build
+// never depends on resolving this file (it's copied into dist/ as-is).
+const aboutHeroBg = "/about/ae-logo-3d.jpg";
 
 export default function About() {
   const [about, setAbout] = useState(placeholderAbout);
