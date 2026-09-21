@@ -2,6 +2,18 @@ name = "alpha-edge-website1"
 main = "worker/index.js"
 compatibility_date = "2025-09-01"
 compatibility_flags = ["nodejs_compat"]
+# ...
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+invocation_logs = true
+persist = true
+
+[observability.traces]
+enabled = true
+head_sampling_rate = 1
+persist = true
+# ...
 
 
 [assets]
