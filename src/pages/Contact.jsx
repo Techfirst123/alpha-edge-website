@@ -36,6 +36,7 @@ export default function Contact() {
         eyebrow="Contact Us"
         title="Let's Build Something Great Together"
         subtitle="Tell us about your project or challenge — our team will get back to you within one business day."
+        variant="contact"
       />
 
       <section className="section section-alt">

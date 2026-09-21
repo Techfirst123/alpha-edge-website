@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
-import HeroSlider from "../components/HeroSlider";
+import HeroModern from "../components/HeroModern";
 import ServiceCard from "../components/ServiceCard";
 import StatBar from "../components/StatBar";
 import Technologies from "../components/Technologies";
@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <>
       {/* HERO */}
-      <HeroSlider ctaText={home.hero_cta_text} ctaLink={home.hero_cta_link} />
+      <HeroModern ctaText={home.hero_cta_text} ctaLink={home.hero_cta_link} />
 
       <StatBar home={home} />
 

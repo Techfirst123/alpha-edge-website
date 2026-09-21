@@ -72,6 +72,7 @@ export default function GetQuote() {
         eyebrow="Get a Quote"
         title="Get Your Free, No-Obligation IT Quote"
         subtitle="Tell us a bit about your business and what you need — we'll put together a tailored quote within one business day."
+        variant="quote"
       />
 
       <section className="section section-alt">

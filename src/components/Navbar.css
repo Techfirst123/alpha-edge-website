@@ -220,7 +220,12 @@
   color: var(--blue-600);
 }
 
-.navbar__dropdown-toggle--open {
+.navbar__dropdown-toggle svg {
+  font-size: 12px;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.navbar__dropdown-toggle--open svg {
   transform: rotate(180deg);
 }
 
@@ -323,31 +328,92 @@
     position: relative;
   }
 
+  /* "Products" + chevron read as one pill: shared hover/active background,
+     chevron tucked right against the label and flipping when open. */
   .navbar__link-row {
     align-items: center;
+    gap: 0;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+  }
+  .navbar__item--dropdown:hover .navbar__link-row,
+  .navbar__item--open .navbar__link-row,
+  .navbar__link-row:has(.navbar__link--active) {
+    background: rgba(63, 69, 78, 0.08);
+  }
+  .navbar__link-row .navbar__link,
+  .navbar__link-row .navbar__link:hover,
+  .navbar__link-row .navbar__link--active {
+    background: transparent;
+    padding-right: 2px;
+  }
+  .navbar__item--dropdown:hover .navbar__link {
+    color: var(--blue-600);
   }
 
   .navbar__dropdown-toggle {
-    width: 26px;
+    width: auto;
+    height: 36px;
+    padding: 0 12px 0 4px;
+    background: transparent;
+  }
+  .navbar__dropdown-toggle:hover {
+    background: transparent;
+  }
+  .navbar__dropdown-toggle svg {
+    font-size: 10px;
+  }
+  .navbar__item--dropdown:hover .navbar__dropdown-toggle,
+  .navbar__item--open .navbar__dropdown-toggle {
+    color: var(--amber);
+  }
+  .navbar__item--dropdown:hover .navbar__dropdown-toggle svg,
+  .navbar__item--open .navbar__dropdown-toggle svg {
+    transform: rotate(180deg);
   }
 
   .navbar__dropdown {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: 50%;
     max-height: none;
-    min-width: 240px;
+    min-width: 260px;
     background: var(--white);
     border: 1px solid rgba(23, 38, 74, 0.08);
-    border-radius: 12px;
-    box-shadow: 0 16px 34px rgba(23, 38, 74, 0.16);
+    border-radius: 14px;
+    box-shadow: 0 22px 44px -12px rgba(20, 23, 28, 0.28);
     padding: 8px;
-    margin-top: 8px;
+    margin-top: 12px;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+    overflow: visible;
+    transform: translate(-50%, -8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
     z-index: 200;
+  }
+  /* invisible bridge over the gap so the menu doesn't close while the
+     pointer travels from the tab down into it */
+  .navbar__dropdown::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -14px;
+    height: 14px;
+  }
+  /* little caret pointing up at the tab */
+  .navbar__dropdown::after {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: var(--white);
+    border-left: 1px solid rgba(23, 38, 74, 0.08);
+    border-top: 1px solid rgba(23, 38, 74, 0.08);
+    transform: translateX(-50%) rotate(45deg);
+    border-radius: 2px 0 0 0;
   }
 
   .navbar__item--dropdown:hover .navbar__dropdown,
@@ -355,11 +421,34 @@
   .navbar__item--open .navbar__dropdown {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translate(-50%, 0);
   }
 
   .navbar__dropdown-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 10px 14px;
+    color: var(--ink);
+    transition: background 0.2s ease, color 0.2s ease, padding 0.2s ease;
+  }
+  .navbar__dropdown-link::after {
+    content: "\2192";
+    font-size: 14px;
+    color: var(--amber);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .navbar__dropdown-link:hover {
+    background: rgba(228, 146, 46, 0.1);
+    color: var(--amber-600);
+    padding-left: 18px;
+  }
+  .navbar__dropdown-link:hover::after {
+    opacity: 1;
+    transform: translateX(0);
   }
 
   .navbar__cta {

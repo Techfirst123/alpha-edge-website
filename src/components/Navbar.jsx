@@ -78,16 +78,22 @@ export default function Navbar() {
 
     };
 
+    const onKey = (e) => {
+      if (e.key === "Escape") setServicesOpen(false);
+    };
+
     document.addEventListener(
       "mousedown",
       onDocClick
     );
+    document.addEventListener("keydown", onKey);
 
     return () => {
       document.removeEventListener(
         "mousedown",
         onDocClick
       );
+      document.removeEventListener("keydown", onKey);
     };
 
   }, [servicesOpen]);
@@ -271,11 +277,13 @@ export default function Navbar() {
                     }`}
                     aria-label="Toggle product categories"
                     aria-expanded={servicesOpen}
-                    onClick={() =>
-                      setServicesOpen(
-                        (v) => !v
-                      )
-                    }
+                    onClick={(e) => {
+                      // When closing, also drop focus — otherwise the
+                      // :focus-within rule keeps the desktop menu visible.
+                      const btn = e.currentTarget;
+                      if (servicesOpen) btn.blur();
+                      setServicesOpen((v) => !v);
+                    }}
                   >
 
                     <FaChevronDown
@@ -320,7 +328,10 @@ export default function Navbar() {
 
                         role="menuitem"
 
-                        onClick={closeMenus}
+                        onClick={(e) => {
+                          e.currentTarget.blur();
+                          closeMenus();
+                        }}
                       >
                         {c.label}
                       </Link>

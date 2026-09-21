@@ -92,6 +92,7 @@ export default function WhoWeAre() {
         eyebrow="Who We Are"
         title="A UK technology partner for the hardware your network runs on"
         subtitle="London-based supplier and integrator of enterprise IT hardware."
+        variant="who"
       />
 
       {/* Intro + stats (light) */}

@@ -1,0 +1,507 @@
+/* =========================================================================
+   Full-bleed hero — slide image fills the whole section edge to edge,
+   copy sits on a dark gradient, framer-motion drives the animation.
+   Colours come from the site tokens in index.css (--navy-*, --amber).
+   ========================================================================= */
+
+.hm {
+  --nav-h: 76px; /* height of the sticky navbar above the hero */
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - var(--nav-h));
+  min-height: calc(100vh - var(--nav-h));
+  color: #fff;
+  background: var(--navy-900);
+}
+
+/* ---------- background layers ---------- */
+
+.hm__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  overflow: hidden;
+}
+.hm__slide {
+  position: absolute;
+  inset: 0;
+}
+/* blurred fill behind the contained image */
+.hm__bg-blur {
+  position: absolute;
+  inset: -40px;
+  width: calc(100% + 80px);
+  height: calc(100% + 80px);
+  object-fit: cover;
+  filter: blur(28px) brightness(0.55) saturate(1.1);
+}
+/* the slide itself, shown in full, never cropped */
+.hm__bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right center;
+}
+.hm__bg-img--fallback {
+  background:
+    radial-gradient(circle at 70% 30%, rgba(228, 146, 46, 0.35), transparent 55%),
+    linear-gradient(135deg, #23272e, #14171c);
+}
+
+/* Dark on the left where the copy sits, clearing toward the right so the
+   slide image shows; plus a floor gradient under the controls/marquee. */
+.hm__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(90deg, rgba(14, 16, 20, 0.96) 0%, rgba(14, 16, 20, 0.88) 40%, rgba(14, 16, 20, 0.45) 66%, rgba(14, 16, 20, 0.15) 100%),
+    linear-gradient(0deg, rgba(14, 16, 20, 0.95) 0%, rgba(14, 16, 20, 0) 32%),
+    linear-gradient(180deg, rgba(14, 16, 20, 0.55) 0%, rgba(14, 16, 20, 0) 18%);
+}
+
+.hm__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 26px 26px;
+  mask-image: linear-gradient(90deg, #000 0%, #000 40%, transparent 70%);
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 40%, transparent 70%);
+  pointer-events: none;
+}
+
+/* soft amber light that follows the pointer */
+.hm__spot {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(600px circle at var(--sx, 50%) var(--sy, 40%), rgba(228, 146, 46, 0.14), transparent 60%);
+}
+
+/* ---------- layout ---------- */
+
+.hm__inner {
+  flex: 1;
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+  align-items: center;
+  gap: 40px;
+  padding-top: clamp(40px, 6vh, 80px);
+  padding-bottom: 24px;
+}
+
+/* ---------- copy ---------- */
+
+.hm__copy {
+  max-width: 660px;
+}
+
+.hm__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 14px 7px 12px;
+  border-radius: 999px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--amber);
+  background: rgba(20, 23, 28, 0.55);
+  border: 1px solid rgba(228, 146, 46, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.hm__pulse {
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--amber);
+}
+.hm__pulse::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid var(--amber);
+  animation: hm-pulse 2s ease-out infinite;
+}
+@keyframes hm-pulse {
+  from { transform: scale(0.6); opacity: 0.9; }
+  to   { transform: scale(2.1); opacity: 0; }
+}
+
+.hm__title {
+  margin: 24px 0 20px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: #fff; /* global h1 styles are dark-on-light; override on this stage */
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* each word slides up from behind its own mask */
+.hm__word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.07em;
+  margin-right: 0.24em;
+}
+.hm__word {
+  display: inline-block;
+  will-change: transform;
+}
+.hm__word--accent {
+  background: linear-gradient(90deg, #ffd08a 0%, var(--amber) 60%, #c8701a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hm__sub {
+  max-width: 540px;
+  font-size: clamp(16px, 1.35vw, 19px);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.hm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.hm__btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 28px;
+  border-radius: 12px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  overflow: hidden;
+  transition: box-shadow 0.3s, background 0.3s, border-color 0.3s;
+}
+.hm__btn--primary {
+  color: #1a1d22;
+  background: linear-gradient(135deg, #f3a74a 0%, var(--amber) 55%, #d17e1c 100%);
+  box-shadow: 0 10px 30px rgba(228, 146, 46, 0.35);
+}
+.hm__btn--primary:hover {
+  box-shadow: 0 16px 40px rgba(228, 146, 46, 0.5);
+}
+/* shine sweep on hover */
+.hm__btn--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.55) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+}
+.hm__btn--primary:hover::before {
+  transform: translateX(120%);
+}
+.hm__btn--primary svg {
+  transition: transform 0.3s;
+}
+.hm__btn--primary:hover svg {
+  transform: translateX(4px);
+}
+.hm__btn--ghost {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(20, 23, 28, 0.35);
+  backdrop-filter: blur(8px);
+}
+.hm__btn--ghost:hover {
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(20, 23, 28, 0.55);
+}
+
+.hm__checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin: 32px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.78);
+}
+.hm__checks li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.hm__checks svg {
+  color: var(--amber);
+}
+
+/* ---------- floating feature cards (right column) ---------- */
+
+.hm__features {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 18px;
+}
+.hm__float--1 { margin-right: 56px; }
+
+.hm__float-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 20px 13px 13px;
+  border-radius: 16px;
+  background: rgba(20, 23, 28, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  white-space: nowrap;
+}
+.hm__float-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: #1a1d22;
+  background: linear-gradient(135deg, #f3a74a, var(--amber));
+  font-size: 17px;
+}
+.hm__float-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.hm__float-text strong {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 16px;
+}
+.hm__float-text small {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ---------- slide controls ---------- */
+
+.hm__controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding-bottom: 26px;
+}
+
+.hm__counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: "Rajdhani", sans-serif;
+  font-weight: 700;
+  overflow: hidden;
+  min-width: 70px;
+}
+.hm__counter strong {
+  display: inline-block;
+  font-size: 30px;
+  color: #fff;
+}
+.hm__counter em {
+  font-style: normal;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.hm__progress {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+}
+.hm__seg {
+  flex: 1;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.hm__seg-fill {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  transition: height 0.2s;
+}
+.hm__seg:hover .hm__seg-fill {
+  height: 5px;
+}
+.hm__seg-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--amber);
+  transform-origin: left;
+  transform: scaleX(0);
+}
+.hm__seg-fill.is-done::after {
+  transform: scaleX(1);
+  opacity: 0.55;
+}
+/* the running segment: its animation end is what advances the slide */
+.hm__seg-fill.is-active {
+  animation-name: hm-seg-timer;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+.hm__seg-fill.is-active::after {
+  animation: inherit;
+  animation-name: hm-seg-grow;
+}
+@keyframes hm-seg-timer {
+  from { opacity: 1; }
+  to   { opacity: 1; }
+}
+@keyframes hm-seg-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.hm__arrows {
+  display: flex;
+  gap: 10px;
+}
+.hm__arrow {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  background: rgba(20, 23, 28, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.25s;
+}
+.hm__arrow:hover {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: #1a1d22;
+  transform: scale(1.06);
+}
+
+/* ---------- vendor marquee ---------- */
+
+.hm__marquee {
+  position: relative;
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 12, 15, 0.55);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.hm__marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 64px;
+  width: max-content;
+  animation: hm-marquee 38s linear infinite;
+}
+.hm__marquee:hover .hm__marquee-track {
+  animation-play-state: paused;
+}
+.hm__marquee-track.is-static {
+  animation: none;
+}
+.hm__marquee-track img {
+  height: 24px;
+  width: auto;
+  max-width: 96px; /* evens out very wide wordmarks (Arista, EMC) */
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+.hm__marquee-track img:hover {
+  opacity: 0.95;
+}
+@keyframes hm-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 991px) {
+  .hm__bg-img {
+    object-fit: cover;
+    object-position: center;
+  }
+  .hm__inner {
+    grid-template-columns: 1fr;
+    align-content: center;
+  }
+  /* on tablets the image sits behind everything, so darken it evenly */
+  .hm__shade {
+    background:
+      linear-gradient(180deg, rgba(14, 16, 20, 0.7) 0%, rgba(14, 16, 20, 0.82) 60%, rgba(14, 16, 20, 0.96) 100%);
+  }
+  .hm__grid {
+    mask-image: none;
+    -webkit-mask-image: none;
+    opacity: 0.6;
+  }
+  .hm__features {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+  }
+  .hm__float--1 { margin-right: 0; }
+}
+
+@media (max-width: 575px) {
+  .hm__features { display: none; }
+  .hm__actions { flex-direction: column; }
+  .hm__actions > div,
+  .hm__btn { width: 100%; justify-content: center; }
+  .hm__controls { gap: 14px; }
+  .hm__counter strong { font-size: 24px; }
+  .hm__arrow { width: 40px; height: 40px; }
+  .hm__marquee-track { gap: 40px; }
+  .hm__marquee-track img { height: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hm__pulse::after { animation: none; }
+  .hm__btn--primary::before { display: none; }
+}

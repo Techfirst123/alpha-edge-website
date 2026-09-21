@@ -18,11 +18,19 @@ export default function Footer({ settings }) {
     <footer className="footer bg-dot-pattern">
       <div className="container footer__grid">
         <div className="footer__brand">
-          <img src={logo} alt={s.site_name || "Alpha Edge IT Services Ltd"} />
-          <p className="footer__about">
-            {s.footer_about_text ||
-              "Alpha Edge IT Services Ltd delivers cutting-edge technology solutions that help businesses grow, modernise, and stay secure."}
-          </p>
+          {/* Logo and description share one card so they read as a unit. */}
+          <div className="footer__brand-card">
+            <NavLink to="/" className="footer__brand-logo">
+              <img src={logo} alt={s.site_name || "Alpha Edge IT Services Ltd"} />
+            </NavLink>
+            <div className="footer__brand-copy">
+              <span className="footer__brand-name">{s.site_name || "Alpha Edge IT Services Ltd"}</span>
+              <p className="footer__about">
+                {s.footer_about_text ||
+                  "Alpha Edge IT Services Ltd delivers cutting-edge technology solutions that help businesses grow, modernise, and stay secure."}
+              </p>
+            </div>
+          </div>
           {socials.length > 0 && (
             <div className="footer__socials">
               {socials.map((soc, i) => (

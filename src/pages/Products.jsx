@@ -215,6 +215,9 @@ export default function Products() {
       ===================================================== */}
 
       <PageHero
+        variant="products"
+        crumb="Products"
+        category={activeCategory?.key}
         eyebrow={
           activeCategory
             ? "Product Category"
