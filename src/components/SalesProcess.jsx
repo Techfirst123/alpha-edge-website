@@ -17,7 +17,7 @@ const STEPS = [
     icon: FaNetworkWired,
     title: "Network",
     text:
-      "Tier1 Data Systems specializes in delivering Enterprise and Small/Medium size IT security solutions across a range of…",
+      "Alpha Edge specializes in delivering Enterprise and Small/Medium size IT security solutions across a range of…",
     cta: "Read More…",
     to: "/services",
     variant: "primary",

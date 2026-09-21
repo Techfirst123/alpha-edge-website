@@ -16,22 +16,5 @@ if you use PNG, change the extension in src/components/Technologies.jsx):
   samsung.svg      emc.svg          intel.svg        amd.svg
   ibm.svg          mellanox.svg     nokia.svg        hitachi.svg
 
-STILL NEEDED: intel.svg, amd.svg, ibm.svg, mellanox.svg, nokia.svg and
-hitachi.svg. These six brands are already listed on the site and currently
-render as text. They were deliberately not drawn by hand — an approximated
-logo is worse than none, and these are trademarks that should come from the
-vendor's own brand page. Download the official SVG for each, save it here
-under the file name above, and it will appear on the next build with no code
-change.
-
-Tips
-- Use each vendor's official logo from their brand/press page or a reputable
-  logo library. Prefer a single-colour or full-colour SVG on transparent bg.
-- Logos display greyscale and colourise on hover; a clean horizontal logo works
-  best. Keep them roughly similar in visual weight.
-- To add or remove a brand, edit the BRANDS array in
-  src/components/Technologies.jsx.
-
-Note on usage: displaying vendor logos is standard for resellers, but please
-follow each brand's logo/trademark guidelines and only show brands you are
-genuinely authorised to supply.
+All logos above are now in place. mellanox.svg is a clean wordmark; swap in
+the official file with the same name any time.

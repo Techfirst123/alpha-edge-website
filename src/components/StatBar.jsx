@@ -53,8 +53,9 @@ function StatItem({ rawValue, label, start, delay }) {
 
 export default function StatBar({ home }) {
   const stats = [
-    { value: `${home.stats_projects}+`, label: "Projects Delivered" },
-    { value: `${home.stats_clients}+`, label: "Happy Clients" },
+    // Falls back to the agreed figures if the database has no value yet.
+    { value: `${Number(home.stats_projects) || 50}+`, label: "Projects Delivered" },
+    { value: `${Number(home.stats_clients) || 20}+`, label: "Happy Clients" },
     // "Years of Experience" intentionally removed — the company is newer than
     // the figure implied, so it's no longer claimed anywhere on the site.
     { value: home.stats_support, label: "Support Availability" },

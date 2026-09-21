@@ -15,19 +15,19 @@ const TILES = [
     img: "/expertise/network.jpg",
     icon: FaNetworkWired,
     title: "Expertise in Network System",
-    text: "Tier1 has built a top-tier network of suppliers and customers who know us well and trust us with their business.",
+    text: "Alpha Edge has built a top-tier network of suppliers and customers who know us well and trust us with their business.",
   },
   {
     img: "/expertise/hardware.jpg",
     icon: FaMicrochip,
     title: "Expertise in Hardware",
-    text: "Tier1 has a track record and an extensive knowledge of new and refurbished hardware equipment.",
+    text: "Alpha Edge has a track record and an extensive knowledge of new and refurbished hardware equipment.",
   },
   {
     img: "/expertise/stock.jpg",
     icon: FaShippingFast,
     title: "All Time Stocks",
-    text: "Tier1 have over 10K+ items in stock. Each product has been tested and guaranteed to meet your requirement.",
+    text: "Alpha Edge has over 10K+ items in stock. Each product has been tested and guaranteed to meet your requirement.",
   },
   {
     img: "/expertise/efficiency.jpg",

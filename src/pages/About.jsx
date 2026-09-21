@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { FaBullseye, FaEye, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import PageHero from "../components/PageHero";
 import aboutEditorial from "../assets/about/editorial-team.webp";
+import aboutHeroTeam from "../assets/about/hero-team.webp";
+import aboutRack from "../assets/whoweare/build-configure.webp";
+import aboutSupport from "../assets/whoweare/support.webp";
 import { getAboutContent, getHomepageContent, getTeam } from "../api/client";
 import { placeholderAbout, placeholderHome, placeholderTeam } from "../data/placeholder";
 import "./About.css";
@@ -12,6 +15,10 @@ import "./About.css";
 // Served from public/about/ as a plain URL rather than imported, so the build
 // never depends on resolving this file (it's copied into dist/ as-is).
 const aboutHeroBg = "/about/ae-logo-3d.jpg";
+
+// Photos that rotate in the About hero's 3D panel: the brand sign, the team,
+// hardware being racked and configured, and on-site support.
+const ABOUT_HERO_IMAGES = [aboutHeroBg, aboutHeroTeam, aboutRack, aboutSupport];
 
 export default function About() {
   const [about, setAbout] = useState(placeholderAbout);
@@ -30,7 +37,7 @@ export default function About() {
         eyebrow="About Us"
         title={about.heading}
         subtitle="Get to know the team and story behind Alpha Edge IT Services."
-        image={aboutHeroBg}
+        images={ABOUT_HERO_IMAGES}
         variant="about"
       />
 
@@ -54,7 +61,7 @@ export default function About() {
             {/* The "Years Experience" badge that sat top-left has been
                 removed; only the Projects Delivered figure remains. */}
             <div className="about-editorial__stat about-editorial__stat--bottom">
-              <span>{home.stats_projects}+</span>
+              <span>{Number(home.stats_projects) || 50}+</span>
               <small>Projects Delivered</small>
             </div>
           </div>

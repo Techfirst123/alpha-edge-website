@@ -79,13 +79,19 @@ const IMAGE_SOURCES = {
 };
 
 // Loads the page's images and cycles through them.
-function useRotatingImages(variant, category, disabled) {
+function useRotatingImages(variant, category, disabled, staticImages) {
   const [images, setImages] = useState([]);
   const [index, setIndex] = useState(0);
   const [broken, setBroken] = useState(() => new Set());
 
   useEffect(() => {
     if (disabled) return undefined;
+    // A page can hand in its own set of photos instead of database images.
+    if (staticImages?.length) {
+      setImages(uniq(staticImages));
+      setIndex(0);
+      return undefined;
+    }
     let alive = true;
     const load = IMAGE_SOURCES[variant] || IMAGE_SOURCES.about;
     load(category).then((list) => {
@@ -96,7 +102,8 @@ function useRotatingImages(variant, category, disabled) {
     return () => {
       alive = false;
     };
-  }, [variant, category, disabled]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [variant, category, disabled, (staticImages || []).join("|")]);
 
   const usable = images.filter((src) => !broken.has(src));
 
@@ -174,10 +181,10 @@ const wordVariants = {
   show: (i) => ({ y: "0%", transition: { duration: 0.8, ease: EASE, delay: 0.15 + i * 0.06 } }),
 };
 
-export default function PageHero({ eyebrow, title, subtitle, image, variant = "about", crumb, category }) {
+export default function PageHero({ eyebrow, title, subtitle, image, images, variant = "about", crumb, category }) {
   const reduceMotion = useReducedMotion();
   // A fixed `image` prop wins; otherwise pull a rotating set from the database.
-  const rotating = useRotatingImages(variant, category, Boolean(image));
+  const rotating = useRotatingImages(variant, category, Boolean(image), images);
   const panelImage = image || rotating.current;
   const sectionRef = useRef(null);
   const visual = VISUALS[variant] || VISUALS.about;
