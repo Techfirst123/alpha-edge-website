@@ -201,6 +201,7 @@ export default function WhoWeAre() {
 
       {editingApart && (
         <EditModal
+          folder="whoweare"
           title="Edit Photo"
           fields={[{ name: "image", label: "Photo", type: "image" }]}
           initialValues={{ image: apartImage }}
@@ -214,6 +215,7 @@ export default function WhoWeAre() {
 
       {editingCapability !== null && (
         <EditModal
+          folder="whoweare"
           title={`Edit ${CAPABILITIES[editingCapability].tag} Photo`}
           fields={[{ name: "image", label: "Photo", type: "image" }]}
           initialValues={{ image: capabilityImages[editingCapability] }}

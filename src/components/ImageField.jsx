@@ -12,10 +12,12 @@ function fileToDataUrl(file) {
   });
 }
 
-// Uploads the chosen file into this project's public/uploads/ folder and
-// reports back the permanent URL — the field never sends raw image bytes
-// through the content-save endpoints, only that URL.
-export default function ImageField({ label, value, onChange, folder = "uploads" }) {
+// Uploads the chosen file to storage and reports back the permanent URL
+// (/uploads/<folder>/<file>) — the field never sends raw image bytes
+// through the content-save endpoints, only that URL. `folder` is the
+// sub-folder *inside* /uploads (e.g. "hero"), so it must not be "uploads"
+// itself — that used to produce /uploads/uploads/... paths.
+export default function ImageField({ label, value, onChange, folder = "images" }) {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
 

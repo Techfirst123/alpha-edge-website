@@ -165,6 +165,7 @@ export default function ProductCard({ product, isAdmin, onUpdated, onDeleted }) 
       {editing && (
         <div onClick={(e) => e.stopPropagation()}>
           <EditModal
+            folder="products"
             title={`Edit ${product.name}`}
             fields={[
               { name: "image", label: "Photo", type: "image" },

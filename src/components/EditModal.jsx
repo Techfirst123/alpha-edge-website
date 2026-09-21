@@ -10,7 +10,9 @@ import "./EditModal.css";
 // touched from here. `onDelete` is optional — pass it to also offer a
 // delete action (used by product editing), gated behind a confirm step so
 // nothing is removed by an accidental click.
-export default function EditModal({ title, fields, initialValues, onSave, onClose, onDelete }) {
+// `folder` picks the storage sub-folder for any image fields (e.g. "hero"
+// → /uploads/hero/...); a field can override it with its own `folder`.
+export default function EditModal({ title, fields, initialValues, onSave, onClose, onDelete, folder = "images" }) {
   const [form, setForm] = useState(initialValues);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -89,7 +91,7 @@ export default function EditModal({ title, fields, initialValues, onSave, onClos
                 <div className="edit-modal__field" key={f.name}>
                   {f.type !== "image" && f.type !== "checkbox" && <label>{f.label}</label>}
                   {f.type === "image" ? (
-                    <ImageField label={f.label} value={form[f.name]} onChange={(v) => setField(f.name, v)} />
+                    <ImageField label={f.label} value={form[f.name]} onChange={(v) => setField(f.name, v)} folder={f.folder || folder} />
                   ) : f.type === "textarea" ? (
                     <textarea
                       value={form[f.name] || ""}

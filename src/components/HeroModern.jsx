@@ -351,6 +351,7 @@ export default function HeroModern({ ctaText = "Get a Free Consultation", ctaLin
 
       {editingIndex !== null && (
         <EditModal
+          folder="hero"
           title={`Edit Slide ${editingIndex + 1}`}
           fields={[
             { name: "image", label: "Image", type: "image" },

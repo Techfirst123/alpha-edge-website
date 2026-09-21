@@ -111,6 +111,7 @@ export default function Expertise() {
 
       {editingIndex !== null && (
         <EditModal
+          folder="expertise"
           title={`Edit ${TILES[editingIndex].title} Photo`}
           fields={[{ name: "image", label: "Photo", type: "image" }]}
           initialValues={{ image: images[editingIndex] }}

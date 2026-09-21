@@ -202,6 +202,7 @@ export default function HeroSlider({ ctaText = "Get a Free Consultation", ctaLin
 
       {editingSlide && (
         <EditModal
+          folder="hero"
           title={`Edit Slide ${editingIndex + 1}`}
           fields={[
             { name: "image", label: "Image", type: "image" },
