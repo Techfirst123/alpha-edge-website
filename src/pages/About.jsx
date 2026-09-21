@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { FaBullseye, FaEye, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import PageHero from "../components/PageHero";
 import aboutEditorial from "../assets/about/editorial-team.webp";
+import aboutHeroBg from "../assets/about/ae-logo-3d.jpg";
 import { getAboutContent, getHomepageContent, getTeam } from "../api/client";
 import { placeholderAbout, placeholderHome, placeholderTeam } from "../data/placeholder";
 import "./About.css";
@@ -12,7 +13,7 @@ import "./About.css";
 // Served from public/about/ as a plain URL rather than imported, so the build
 // never depends on resolving this file (it's copied into dist/ as-is).
 // const aboutHeroBg = "/about/ae-logo-3d.jpg";
-import aboutHeroBg from "../assets/about/ae-logo-3d.jpg";
+
 
 export default function About() {
   const [about, setAbout] = useState(placeholderAbout);
