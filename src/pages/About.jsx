@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { FaBullseye, FaEye, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import PageHero from "../components/PageHero";
 import aboutEditorial from "../assets/about/editorial-team.webp";
-import aboutHeroBg from "../assets/about/ae-logo-3d.jpg";
+import aboutHeroBg from "../assets/about/Alpha_Edge_logos.jpg";
 import { getAboutContent, getHomepageContent, getTeam } from "../api/client";
 import { placeholderAbout, placeholderHome, placeholderTeam } from "../data/placeholder";
 import "./About.css";
