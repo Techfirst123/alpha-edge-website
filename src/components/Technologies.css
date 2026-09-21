@@ -76,27 +76,55 @@
   margin-top: 2px;
 }
 
-/* ---------- Brands header ---------- */
-.vendors-brandhead {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-bottom: 22px;
+/* ---------- Brands: rotating orbit ---------- */
+.brand-showcase {
+  /* the rotating (square) tracks poke past the circle at their corners —
+     clip them so they never cause sideways scrolling */
+  overflow: clip;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 56px);
+  margin-top: 24px;
 }
-
-.vendors-brandhead h3 {
+.brand-showcase__copy h3 {
   font-family: "Rajdhani", sans-serif;
-  font-size: 24px;
+  font-size: clamp(28px, 3.4vw, 40px);
   font-weight: 700;
   color: var(--navy-800);
+  margin: 12px 0 10px;
 }
-
-.vendors-brandhead p {
-  font-size: 14.5px;
+.brand-showcase__copy p {
+  font-size: 15.5px;
   color: var(--muted);
+  max-width: 420px;
+}
+.brand-showcase__stats {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  padding: 0;
+  margin: 24px 0 26px;
+}
+.brand-showcase__stats li {
+  display: flex;
+  flex-direction: column;
+}
+.brand-showcase__stats strong {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--navy-900);
+}
+.brand-showcase__stats span {
   margin-top: 4px;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--amber-600);
 }
 
 .vendors-browse {
@@ -105,143 +133,252 @@
   gap: 8px;
   font-family: "Rajdhani", sans-serif;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--blue-600);
   white-space: nowrap;
 }
-
 .vendors-browse svg {
   transition: transform 0.25s ease;
 }
-
 .vendors-browse:hover svg {
   transform: translateX(5px);
 }
 
-/* ---------- Brand grid ---------- */
-.brand-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-
-/* 3D tilt tile — raised, beveled chip that leans toward the cursor. */
-.brand-tile {
-  --rx: 0deg;
-  --ry: 0deg;
-  --mx: 50%;
-  --my: 50%;
-  --lift: 0;
-  height: 92px;
-  border-radius: 16px;
-  perspective: 650px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.brand-tile__inner {
+/* The orbit is a square container; everything inside scales from its width
+   (--size = 100cqw is resolved by the children, against this container). */
+.brand-orbit {
+  --size: 100cqw;
+  --r-outer: calc(var(--size) * 0.43);
+  --r-inner: calc(var(--size) * 0.27);
+  --chip-outer: calc(var(--size) * 0.12);
+  --chip-inner: calc(var(--size) * 0.115);
+  --spin-outer: 70s;
+  --spin-inner: 50s;
   position: relative;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: linear-gradient(150deg, #ffffff 0%, #eceef1 100%);
-  border: 1px solid rgba(23, 38, 74, 0.09);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -2px 6px rgba(23, 38, 74, 0.05),
-    0 10px 22px rgba(23, 38, 74, calc(0.07 + 0.09 * var(--lift)));
-  transform-style: preserve-3d;
-  transform: rotateX(var(--rx)) rotateY(var(--ry))
-    translateZ(calc(6px * var(--lift))) scale(calc(1 + 0.02 * var(--lift)));
-  transition: transform 0.12s ease-out, box-shadow 0.2s ease, border-color 0.2s ease;
-  will-change: transform;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  container-type: inline-size;
 }
 
-.brand-tile:hover .brand-tile__inner {
-  border-color: rgba(63, 69, 78, 0.28);
-}
-
-/* pointer-tracking sheen that sits on the surface */
-.brand-tile__shine {
+.brand-orbit__glow {
   position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  background: radial-gradient(
-    130px circle at var(--mx) var(--my),
-    rgba(228, 146, 46, 0.30),
-    rgba(228, 146, 46, 0) 60%
-  );
-  opacity: var(--lift);
-  transition: opacity 0.25s ease;
+  inset: 18%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(228, 146, 46, 0.18), rgba(228, 146, 46, 0) 70%);
+  filter: blur(10px);
+}
+
+/* the two visible circles */
+.brand-orbit__ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
   pointer-events: none;
 }
+.brand-orbit__ring--outer {
+  width: calc(var(--r-outer) * 2);
+  height: calc(var(--r-outer) * 2);
+  border: 1.5px dashed rgba(20, 23, 28, 0.16);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0) 60%, rgba(20, 23, 28, 0.03) 100%);
+}
+.brand-orbit__ring--inner {
+  width: calc(var(--r-inner) * 2);
+  height: calc(var(--r-inner) * 2);
+  border: 1.5px solid rgba(228, 146, 46, 0.35);
+  box-shadow: 0 0 0 10px rgba(228, 146, 46, 0.05), inset 0 0 40px rgba(228, 146, 46, 0.08);
+}
+/* a small light travelling round each circle */
+.brand-orbit__ring::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  margin-left: -4.5px;
+  border-radius: 50%;
+  background: var(--amber);
+  box-shadow: 0 0 12px 3px rgba(228, 146, 46, 0.6);
+}
+.brand-orbit__ring--outer::after {
+  background: var(--navy-800);
+  box-shadow: 0 0 10px 2px rgba(20, 23, 28, 0.35);
+}
 
-/* Real logos in their original brand colours, floating above the surface for depth. */
-.brand-tile__logo {
-  position: relative;
-  height: 100%;
+/* rotating tracks */
+.brand-orbit__track {
+  position: absolute;
+  inset: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  animation: brand-orbit-spin var(--spin) linear infinite;
+  animation-direction: var(--dir);
+}
+.brand-orbit__track--outer {
+  --spin: var(--spin-outer);
+  --dir: normal;
+  --counter: reverse;
+  --radius: var(--r-outer);
+  --chip: var(--chip-outer);
+}
+.brand-orbit__track--inner {
+  --spin: var(--spin-inner);
+  --dir: reverse;
+  --counter: normal;
+  --radius: var(--r-inner);
+  --chip: var(--chip-inner);
+}
+/* the small lights ride along with the rings */
+.brand-orbit__ring--outer {
+  animation: brand-orbit-spin-ring var(--spin-outer) linear infinite;
+}
+.brand-orbit__ring--inner {
+  animation: brand-orbit-spin-ring var(--spin-inner) linear infinite reverse;
+}
+
+@keyframes brand-orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes brand-orbit-spin-ring {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.brand-orbit__item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--chip);
+  height: var(--chip);
+  margin: calc(var(--chip) / -2) 0 0 calc(var(--chip) / -2);
+  transform: rotate(calc(360deg / var(--count) * var(--i))) translateY(calc(var(--radius) * -1))
+    rotate(calc(-360deg / var(--count) * var(--i)));
+}
+.brand-orbit__chip {
+  display: grid;
+  place-items: center;
   width: 100%;
-  max-height: 46px;
-  max-width: 100%;
+  height: 100%;
+  padding: 18%;
+  border-radius: 50%;
+  background: linear-gradient(150deg, #ffffff 0%, #eef0f3 100%);
+  border: 1px solid rgba(20, 23, 28, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 8px 20px -6px rgba(20, 23, 28, 0.22);
+  /* spin opposite to the ring so the logo stays upright */
+  animation: brand-orbit-spin var(--spin) linear infinite;
+  animation-direction: var(--counter);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.brand-orbit__chip img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
-  transform: translateZ(34px);
-  opacity: 0.92;
-  transition: opacity 0.25s ease, filter 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
-
-.brand-tile:hover .brand-tile__logo {
-  opacity: 1;
-  filter: drop-shadow(0 2px 6px rgba(23, 38, 74, 0.18));
-}
-
-/* Text fallback (shown until an official logo file is added) */
-.brand-tile__name {
-  position: relative;
-  transform: translateZ(30px);
+.brand-orbit__name {
   font-family: "Rajdhani", sans-serif;
   font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.02em;
-  color: var(--navy-800);
+  font-size: 11px;
   text-align: center;
-  line-height: 1.15;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-  transition: color 0.2s ease;
+  line-height: 1.1;
+  color: var(--navy-800);
+}
+.brand-orbit__item:hover {
+  z-index: 3;
+}
+.brand-orbit__item:hover .brand-orbit__chip {
+  border-color: rgba(228, 146, 46, 0.7);
+  box-shadow: 0 0 0 4px rgba(228, 146, 46, 0.18), 0 14px 28px -8px rgba(20, 23, 28, 0.35);
+}
+.brand-orbit__item:hover .brand-orbit__chip img {
+  transform: scale(1.18);
 }
 
-.brand-tile:hover .brand-tile__name {
-  color: var(--blue-600);
+/* pause everything while the visitor looks at the logos */
+.brand-orbit:hover .brand-orbit__track,
+.brand-orbit:hover .brand-orbit__chip,
+.brand-orbit:hover .brand-orbit__ring {
+  animation-play-state: paused;
+}
+
+/* centre hub */
+.brand-orbit__hub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--size) * 0.26);
+  height: calc(var(--size) * 0.26);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  padding: 6px;
+  background: conic-gradient(from 0deg, #e4922e, #f6b25a, #3a78c9, #e4922e);
+  box-shadow: 0 20px 44px -14px rgba(20, 23, 28, 0.45);
+  animation: brand-orbit-hub 6s ease-in-out infinite;
+}
+.brand-orbit__hub img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  background: #fff;
+}
+@keyframes brand-orbit-hub {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .brand-tile__inner {
-    transform: none;
+  .brand-orbit__track,
+  .brand-orbit__chip,
+  .brand-orbit__ring,
+  .brand-orbit__hub {
+    animation: none;
   }
 }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .brand-showcase {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .brand-showcase__copy p {
+    margin: 0 auto;
+  }
+  .brand-showcase__stats {
+    justify-content: center;
+  }
+  .brand-orbit {
+    max-width: 560px;
+  }
+}
+
 @media (max-width: 1000px) {
   .vendor-cats {
     grid-template-columns: repeat(2, 1fr);
   }
-  .brand-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
 }
 
 @media (max-width: 720px) {
-  .brand-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-  }
-  .brand-tile {
-    height: 78px;
-  }
-  .brand-tile__logo {
-    max-height: 40px;
-  }
 }
 
 @media (max-width: 560px) {
@@ -249,25 +386,9 @@
     grid-template-columns: 1fr;
     margin-bottom: 44px;
   }
-  .brand-tile__name {
-    font-size: 14px;
-  }
 }
 
 @media (max-width: 400px) {
-  .brand-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  .brand-tile {
-    height: 72px;
-  }
-  .brand-tile__inner {
-    padding: 10px 12px;
-  }
-  .brand-tile__logo {
-    max-height: 36px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

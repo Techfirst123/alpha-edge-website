@@ -6,6 +6,7 @@ import {
 } from "react-icons/fa";
 import { getSupplyCategories } from "../api/client";
 import { DEFAULT_CATEGORIES } from "../data/contentDefaults";
+import hubLogo from "../assets/Alpha_Edge_logos.jpg";
 import "./Technologies.css";
 
 // Icons are assigned by rotation (not chosen per item) so admin-added
@@ -85,57 +86,28 @@ function CategoryTile({ item, index }) {
   );
 }
 
-function BrandTile({ brand, index }) {
+// One logo "planet" on the orbit. The chip counter-rotates against its ring
+// so the logo always stays upright while the ring turns.
+function OrbitLogo({ brand, index, count }) {
   const [imgOk, setImgOk] = useState(true);
-  const ref = useRef(null);
-
-  const handleMove = (e) => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const r = el.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width; // 0..1
-    const py = (e.clientY - r.top) / r.height; // 0..1
-    el.style.setProperty("--rx", `${(0.5 - py) * 16}deg`);
-    el.style.setProperty("--ry", `${(px - 0.5) * 18}deg`);
-    el.style.setProperty("--mx", `${px * 100}%`);
-    el.style.setProperty("--my", `${py * 100}%`);
-    el.style.setProperty("--lift", "1");
-  };
-
-  const handleLeave = () => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.setProperty("--rx", "0deg");
-    el.style.setProperty("--ry", "0deg");
-    el.style.setProperty("--lift", "0");
-  };
-
   return (
-    <div
-      className="brand-tile"
-      ref={ref}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      style={{ transitionDelay: `${index * 35}ms` }}
-    >
-      <div className="brand-tile__inner">
-        <span className="brand-tile__shine" aria-hidden="true" />
+    <li className="brand-orbit__item" style={{ "--i": index, "--count": count }}>
+      <span className="brand-orbit__chip" title={brand.name}>
         {imgOk ? (
-          <img
-            className="brand-tile__logo"
-            src={`/brands/${brand.file}`}
-            alt={brand.name}
-            loading="lazy"
-            onError={() => setImgOk(false)}
-          />
+          <img src={`/brands/${brand.file}`} alt={brand.name} loading="lazy" onError={() => setImgOk(false)} />
         ) : (
-          <span className="brand-tile__name">{brand.name}</span>
+          <span className="brand-orbit__name">{brand.name}</span>
         )}
-      </div>
-    </div>
+      </span>
+    </li>
   );
 }
+
+// Split the brand list across the two rings: fewer on the inner ring (it's
+// smaller), the rest on the outer ring.
+const INNER_COUNT = 10;
+const INNER_BRANDS = BRANDS.slice(0, INNER_COUNT);
+const OUTER_BRANDS = BRANDS.slice(INNER_COUNT);
 
 export default function Technologies() {
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
@@ -162,20 +134,53 @@ export default function Technologies() {
           ))}
         </div>
 
-        <div className="vendors-brandhead">
-          <div>
+        <div className="brand-showcase">
+          <div className="brand-showcase__copy">
+            <span className="eyebrow">Our Vendors</span>
             <h3>Brands we deal in</h3>
-            <p>Sourcing across {BRANDS.length}+ leading networking &amp; IT vendors.</p>
+            <p>
+              Sourcing across {BRANDS.length}+ leading networking &amp; IT vendors — new, sealed and
+              certified refurbished, all through one partner.
+            </p>
+            <ul className="brand-showcase__stats">
+              <li>
+                <strong>{BRANDS.length}+</strong>
+                <span>Vendors</span>
+              </li>
+              <li>
+                <strong>10K+</strong>
+                <span>Items in stock</span>
+              </li>
+              <li>
+                <strong>3-5</strong>
+                <span>Day delivery</span>
+              </li>
+            </ul>
+            <Link to="/products" className="vendors-browse">
+              Browse the catalogue <FaArrowRight aria-hidden="true" />
+            </Link>
           </div>
-          <Link to="/products" className="vendors-browse">
-            Browse the catalogue <FaArrowRight aria-hidden="true" />
-          </Link>
-        </div>
 
-        <div className="brand-grid">
-          {BRANDS.map((b, i) => (
-            <BrandTile brand={b} index={i} key={b.name} />
-          ))}
+          <div className="brand-orbit" role="group" aria-label="Brands we deal in">
+            <span className="brand-orbit__glow" aria-hidden="true" />
+            <span className="brand-orbit__ring brand-orbit__ring--outer" aria-hidden="true" />
+            <span className="brand-orbit__ring brand-orbit__ring--inner" aria-hidden="true" />
+
+            <ul className="brand-orbit__track brand-orbit__track--outer">
+              {OUTER_BRANDS.map((b, i) => (
+                <OrbitLogo brand={b} index={i} count={OUTER_BRANDS.length} key={b.name} />
+              ))}
+            </ul>
+            <ul className="brand-orbit__track brand-orbit__track--inner">
+              {INNER_BRANDS.map((b, i) => (
+                <OrbitLogo brand={b} index={i} count={INNER_BRANDS.length} key={b.name} />
+              ))}
+            </ul>
+
+            <div className="brand-orbit__hub">
+              <img src={hubLogo} alt="Alpha Edge IT Solutions" />
+            </div>
+          </div>
         </div>
       </div>
 
