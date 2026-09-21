@@ -14,12 +14,14 @@ import logo from "../assets/Alpha_Edge_logos.jpg";
 import "./Navbar.css";
 
 
+// "Services" has been replaced by "Products", which keeps the hardware
+// category dropdown that used to hang off Services. The separate Products
+// link that sat beside it is gone — the two are now one item.
 const links = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/who-we-are", label: "Who We Are" },
-  { to: "/services", label: "Services", dropdown: true },
-  { to: "/products", label: "Products" },
+  { to: "/products", label: "Products", dropdown: true },
   { to: "/contact", label: "Contact" },
 ];
 

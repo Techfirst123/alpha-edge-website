@@ -5,13 +5,15 @@
 import slide1 from "../assets/hero 1.avif";
 import slide2 from "../assets/hero2.png";
 import slide3 from "../assets/hero3.png";
-import slide4 from "../assets/hero 2.avif";
+// Replaces the old "hero 2.avif" AI-robot shot with the Alpha Edge brand
+// banner (logo lockup, global logistics, vendor boxes).
+import slide4 from "../assets/hero-alpha-edge-banner.png";
 import apartImg from "../assets/whoweare/apart.webp";
 import sourcingImg from "../assets/whoweare/sourcing.webp";
 import buildImg from "../assets/whoweare/build-configure.webp";
 import verifiedImg from "../assets/whoweare/verified.webp";
 import supportImg from "../assets/whoweare/support.webp";
-
+ 
 export const DEFAULT_SLIDES = [
   {
     image: slide1,
@@ -38,7 +40,7 @@ export const DEFAULT_SLIDES = [
     subtitle: "From infrastructure to innovation, Alpha Edge is the technology partner behind your next move.",
   },
 ];
-
+ 
 export const DEFAULT_CATEGORIES = [
   { label: "Network Switches", sub: "Access to core, GbE–100G" },
   { label: "Routers & Gateways", sub: "Edge, SD-WAN, branch" },
@@ -49,10 +51,10 @@ export const DEFAULT_CATEGORIES = [
   { label: "Optics · GLC & SFP", sub: "Transceivers, DAC, cabling" },
   { label: "IP Phones & UC", sub: "Handsets, gateways, DECT" },
 ];
-
+ 
 export const DEFAULT_APART_IMAGE = apartImg;
 export const DEFAULT_CAPABILITY_IMAGES = [sourcingImg, buildImg, verifiedImg, supportImg];
-
+ 
 export const DEFAULT_EXPERTISE_IMAGES = [
   "/expertise/network.jpg",
   "/expertise/hardware.jpg",
@@ -61,3 +63,4 @@ export const DEFAULT_EXPERTISE_IMAGES = [
   "/expertise/satisfaction.jpg",
   "/expertise/support.jpg",
 ];
+ 

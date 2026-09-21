@@ -27,7 +27,6 @@ const BRANDS = [
   { name: "Juniper", file: "juniper.svg" },
   { name: "Fortinet", file: "fortinet.svg" },
   { name: "Palo Alto", file: "palo-alto.svg" },
-  { name: "Sophos", file: "sophos.svg" },
   { name: "Huawei", file: "huawei.svg" },
   { name: "VMware", file: "vmware.svg" },
   { name: "Ruckus", file: "ruckus.png" },
@@ -36,13 +35,18 @@ const BRANDS = [
   { name: "D-Link", file: "d-link.svg" },
   { name: "TP-Link", file: "tp-link.svg" },
   { name: "Hikvision", file: "hikvision.svg" },
-  { name: "Dahua", file: "dahua.svg" },
   { name: "Avaya", file: "avaya.svg" },
   { name: "Polycom", file: "polycom.svg" },
   { name: "Alcatel-Lucent", file: "alcatel-lucent.svg" },
   { name: "Brocade", file: "brocade.svg" },
   { name: "Samsung", file: "samsung.svg" },
   { name: "EMC", file: "emc.svg" },
+  { name: "Intel", file: "intel.svg" },
+  { name: "AMD", file: "amd.svg" },
+  { name: "IBM", file: "ibm.svg" },
+  { name: "Mellanox", file: "mellanox.svg" },
+  { name: "Nokia", file: "nokia.svg" },
+  { name: "Hitachi", file: "hitachi.svg" },
 ];
 
 function useReveal() {

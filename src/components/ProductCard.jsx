@@ -1,26 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  FaArrowRight,
-  FaNetworkWired,
-  FaServer,
-  FaHdd,
-  FaSitemap,
-  FaPlug,
-  FaStream,
-  FaPen,
+  FaArrowRight, FaNetworkWired, FaServer, FaHdd, FaSitemap,
+  FaPlug, FaStream, FaPen, FaCheck,
 } from "react-icons/fa";
 
-import {
-  adminUpdateProduct,
-  adminDeleteProduct,
-} from "../api/client";
-
+import { adminUpdateProduct, adminDeleteProduct } from "../api/client";
 import { imageFor } from "../utils/productImage";
+import { availabilityLabel } from "../utils/productAvailability";
 import EditModal from "./EditModal";
 
 import "./ProductCard.css";
-
 
 const CATEGORY_ICONS = {
   switch: FaNetworkWired,
@@ -31,420 +21,189 @@ const CATEGORY_ICONS = {
   optic: FaPlug,
 };
 
-
 const STOCK_OPTIONS = [
   { value: "in", label: "In stock" },
   { value: "order", label: "On order" },
 ];
 
+const CONDITION_OPTIONS = [
+  { value: "", label: "Not shown" },
+  { value: "new", label: "New" },
+  { value: "refurb", label: "Refurbished" },
+];
 
-export default function ProductCard({
-  product,
-  isAdmin,
-  onUpdated,
-  onDeleted,
-}) {
+const CONDITION_LABELS = { new: "New", refurb: "Refurb" };
 
+// "48, UPOE" -> ["48", "UPOE"]
+function parseSpecs(raw) {
+  if (!raw) return [];
+  return String(raw)
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 6);
+}
+
+export default function ProductCard({ product, isAdmin, onUpdated, onDeleted }) {
   const [editing, setEditing] = useState(false);
-
   const navigate = useNavigate();
 
-  const Icon =
-    CATEGORY_ICONS[product.category] ||
-    FaNetworkWired;
-
+  const Icon = CATEGORY_ICONS[product.category] || FaNetworkWired;
   const image = imageFor(product);
 
+  const productId = product._id ?? product.id;
+  const productDetailsHref = `/products/${productId}`;
+  const quoteHref = `/get-a-quote?model=${encodeURIComponent(
+    product.model
+  )}&product=${encodeURIComponent(product.name)}`;
 
-  /* =========================================================
-     PRODUCT DETAILS URL
-  ========================================================= */
+  // The SKU/model leads the card (as on the reference site) and the full
+  // product name becomes the supporting description. Falls back to the name
+  // when a product has no model recorded, so the card is never headless.
+  const heading = product.model || product.name;
+  const description = product.model ? product.name : product.short_description;
 
-  const productId =
-    product._id ?? product.id;
+  const condition = CONDITION_LABELS[product.condition] ? product.condition : null;
+  const specs = parseSpecs(product.specs);
+  const availability = availabilityLabel(product.stock);
 
-  const productDetailsHref =
-    `/products/${productId}`;
-
-
-  /* =========================================================
-     QUOTE URL
-  ========================================================= */
-
-  const quoteHref =
-    `/get-a-quote?model=${encodeURIComponent(
-      product.model
-    )}&product=${encodeURIComponent(
-      product.name
-    )}`;
-
-
-  /* =========================================================
-     OPEN PRODUCT DETAILS
-     
-     Whole card is clickable.
-     
-     Buttons/interactive elements stop propagation so their
-     own functions continue to work.
-  ========================================================= */
-
-  const openProductDetails = () => {
-    navigate(productDetailsHref);
-  };
-
-
-  /* =========================================================
-     KEYBOARD ACCESSIBILITY
-  ========================================================= */
+  const openProductDetails = () => navigate(productDetailsHref);
 
   const handleCardKeyDown = (e) => {
-
-    if (
-      e.key === "Enter" ||
-      e.key === " "
-    ) {
-
+    if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-
       openProductDetails();
-
     }
-
   };
 
-
   return (
-
     <article
       className="product-card"
-
       onClick={openProductDetails}
-
       onKeyDown={handleCardKeyDown}
-
       role="link"
-
       tabIndex={0}
-
       aria-label={`View ${product.name} details`}
     >
-
-
-      {/* =====================================================
-          PRODUCT IMAGE
-      ===================================================== */}
-
       <div className="product-card__media">
-
         {image ? (
-
           <img
             className="product-card__img"
             src={image}
-            alt={
-              product.category_label ||
-              product.category
-            }
+            alt={product.category_label || product.category}
             loading="lazy"
           />
-
         ) : (
-
-          <Icon
-            className="product-card__glyph"
-            aria-hidden="true"
-          />
-
+          <Icon className="product-card__glyph" aria-hidden="true" />
         )}
 
-
-        <span className="product-card__brand">
-          {product.brand}
-        </span>
-
-
-        <span
-          className={`product-stock product-stock--${product.stock}`}
-        >
-
-          <i />
-
-          {product.stock === "in"
-            ? "In stock"
-            : "On order"}
-
-        </span>
-
+        {condition && (
+          <span className={`product-condition product-condition--${condition}`}>
+            {CONDITION_LABELS[condition]}
+          </span>
+        )}
       </div>
 
-
-      {/* =====================================================
-          PRODUCT BODY
-      ===================================================== */}
-
       <div className="product-card__body">
+        <span className="product-card__price-lead">Price on request</span>
+        <span className="product-card__availability">{availability}</span>
 
+        {product.warranty && (
+          <span className="product-card__warranty">
+            <FaCheck aria-hidden="true" /> {product.warranty}
+          </span>
+        )}
 
-        <span className="product-card__category">
-          {product.category_label ||
-            product.category}
-        </span>
+        {product.brand && (
+          <span className="product-card__maker">{product.brand}</span>
+        )}
 
+        <h3>{heading}</h3>
 
-        {/* =================================================
-            PRODUCT NAME
-        ================================================= */}
+        {specs.length > 0 && (
+          <ul className="product-card__specs">
+            {specs.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+        )}
 
-        <h3>
-          {product.name}
-        </h3>
-
-
-        <span className="product-card__model">
-          {product.model}
-        </span>
-
-
-        <p className="product-card__desc">
-          {product.short_description}
-        </p>
-
-
-        {/* =================================================
-            ADMIN
-        ================================================= */}
+        {description && <p className="product-card__desc">{description}</p>}
 
         {isAdmin ? (
-
           <div className="product-card__foot product-card__foot--admin">
-
             <button
               type="button"
               className="btn btn-dark product-card__edit-btn"
-
               onClick={(e) => {
-
-                /*
-                 * IMPORTANT:
-                 * Prevent the card click from opening
-                 * Product Details.
-                 */
-
+                // Stop the card's own click from opening Product Details.
                 e.stopPropagation();
-
                 setEditing(true);
-
               }}
             >
-
               <FaPen />
-
               Edit Product
-
             </button>
-
           </div>
-
         ) : (
-
-          /* =================================================
-             PUBLIC
-          ================================================= */
-
           <div className="product-card__foot">
-
-            <span className="product-card__price">
-
-              <small>
-                PRICE
-              </small>
-
-              <strong>
-                On request
-              </strong>
-
-            </span>
-
-
             <button
               type="button"
               className="btn btn-primary product-card__cta"
-
               onClick={(e) => {
-
-                /*
-                 * IMPORTANT:
-                 * Prevent the card click.
-                 * Only Request Price action runs.
-                 */
-
                 e.stopPropagation();
-
                 navigate(quoteHref);
-
               }}
             >
-
               Request Price
-
               <FaArrowRight />
-
             </button>
-
           </div>
-
         )}
-
       </div>
 
-
-      {/* =====================================================
-          EDIT MODAL
-      ===================================================== */}
-
       {editing && (
-
-        <div
-          onClick={(e) =>
-            e.stopPropagation()
-          }
-        >
-
+        <div onClick={(e) => e.stopPropagation()}>
           <EditModal
-
             title={`Edit ${product.name}`}
-
             fields={[
-
-              {
-                name: "image",
-                label: "Photo",
-                type: "image",
-              },
-
-              {
-                name: "name",
-                label: "Product Name",
-                type: "text",
-                maxLength: 160,
-              },
-
-              {
-                name: "model",
-                label: "Model No.",
-                type: "text",
-                maxLength: 80,
-              },
-
-              {
-                name: "brand",
-                label: "Brand",
-                type: "text",
-                maxLength: 80,
-              },
-
-              {
-                name: "category_label",
-                label: "Category Label",
-                type: "text",
-                maxLength: 80,
-              },
-
-              {
-                name: "short_description",
-                label: "Short Description",
-                type: "textarea",
-                maxLength: 300,
-              },
-
-              {
-                name: "stock",
-                label: "Availability",
-                type: "select",
-                options: STOCK_OPTIONS,
-              },
-
-              {
-                name: "featured",
-                label: "Display on homepage (max 10)",
-                type: "checkbox",
-              },
-
+              { name: "image", label: "Photo", type: "image" },
+              { name: "name", label: "Product Name", type: "text", maxLength: 160 },
+              { name: "model", label: "Model / SKU", type: "text", maxLength: 80 },
+              { name: "brand", label: "Brand", type: "text", maxLength: 80 },
+              { name: "category_label", label: "Category Label", type: "text", maxLength: 80 },
+              { name: "short_description", label: "Short Description", type: "textarea", maxLength: 300 },
+              { name: "condition", label: "Condition badge", type: "select", options: CONDITION_OPTIONS },
+              { name: "specs", label: "Spec chips (comma separated, e.g. 48, UPOE)", type: "text", maxLength: 120 },
+              { name: "warranty", label: "Warranty line (e.g. Warranty included)", type: "text", maxLength: 80 },
+              { name: "stock", label: "Availability", type: "select", options: STOCK_OPTIONS },
+              { name: "featured", label: "Display on homepage (max 10)", type: "checkbox" },
             ]}
-
-
             initialValues={{
-
-              image:
-                product.image || "",
-
-              name:
-                product.name || "",
-
-              model:
-                product.model || "",
-
-              brand:
-                product.brand || "",
-
-              category_label:
-                product.category_label || "",
-
-              short_description:
-                product.short_description || "",
-
-              stock:
-                product.stock === "order"
-                  ? "order"
-                  : "in",
-
-              featured:
-                Boolean(product.featured),
-
+              image: product.image || "",
+              name: product.name || "",
+              model: product.model || "",
+              brand: product.brand || "",
+              category_label: product.category_label || "",
+              short_description: product.short_description || "",
+              condition: product.condition || "",
+              specs: product.specs || "",
+              warranty: product.warranty || "",
+              stock: product.stock === "order" ? "order" : "in",
+              featured: Boolean(product.featured),
             }}
-
-
-            onClose={() =>
-              setEditing(false)
-            }
-
-
+            onClose={() => setEditing(false)}
             onSave={async (values) => {
-
-              await adminUpdateProduct({
-                id: product.id,
-                ...values,
-              });
-
-
-              onUpdated?.({
-                ...product,
-                ...values,
-              });
-
+              await adminUpdateProduct({ id: product.id, ...values });
+              onUpdated?.({ ...product, ...values });
             }}
-
-
             onDelete={async () => {
-
-              await adminDeleteProduct(
-                product.id
-              );
-
-              onDeleted?.(
-                product.id
-              );
-
+              await adminDeleteProduct(product.id);
+              onDeleted?.(product.id);
             }}
-
           />
-
         </div>
-
       )}
-
     </article>
-
   );
-
 }

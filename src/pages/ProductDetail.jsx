@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { getProducts } from "../api/client";
 import { imageFor } from "../utils/productImage";
+import { availabilityLabel } from "../utils/productAvailability";
 import { placeholderProducts } from "../data/placeholder";
 import "./ProductDetail.css";
 
@@ -130,7 +131,7 @@ export default function ProductDetail() {
                   className={`product-detail__stock product-detail__stock--${product.stock}`}
                 >
                   <i />
-                  {product.stock === "in" ? "In stock" : "On order"}
+                  {availabilityLabel(product.stock)}
                 </span>
               </div>
 
@@ -183,7 +184,7 @@ export default function ProductDetail() {
                   <div>
                     <small>AVAILABILITY</small>
                     <strong>
-                      {product.stock === "in" ? "In stock" : "On order"}
+                      {availabilityLabel(product.stock)}
                     </strong>
                   </div>
                 </div>

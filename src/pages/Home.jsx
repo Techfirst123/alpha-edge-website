@@ -14,9 +14,20 @@ import { getHomepageContent, getServices } from "../api/client";
 import { placeholderHome, placeholderServices } from "../data/placeholder";
 import "./Home.css";
 
+// Services retired from the site. Kept as a filter (rather than a whitelist)
+// so anything an admin adds later still shows up automatically; these three
+// only disappear for good once they're deleted in the admin panel, at which
+// point this list can go away.
+const HIDDEN_SERVICE_SLUGS = new Set([
+  "cybersecurity",
+  "software-development",
+  "data-analytics",
+]);
+
 export default function Home() {
   const [home, setHome] = useState(placeholderHome);
   const [services, setServices] = useState(placeholderServices);
+  const visibleServices = services.filter((s) => !HIDDEN_SERVICE_SLUGS.has(s.slug));
 
   useEffect(() => {
     getHomepageContent().then(setHome).catch(() => setHome(placeholderHome));
@@ -30,17 +41,21 @@ export default function Home() {
 
       <StatBar home={home} />
 
-      {/* SERVICES */}
+      {/* WHAT WE SUPPLY — deliberately sits above "What We Do": hardware
+          supply is the primary business, services are the supporting offer. */}
+      <Technologies />
+
+      {/* WHAT WE DO */}
       <section className="section section-alt services-section">
         <div className="container">
           <span className="eyebrow">What We Do</span>
           <h2 className="section-heading">Full-Spectrum IT Services for Modern Business</h2>
           <p className="section-subheading">
-            From cloud and cybersecurity to bespoke software, Alpha Edge delivers the technology
-            backbone your business needs to move faster and stay secure.
+            From cloud platforms to managed support and network infrastructure, Alpha Edge
+            delivers the technology backbone your business needs to move faster and stay secure.
           </p>
           <div className="grid grid-3">
-            {services.slice(0, 6).map((s, i) => (
+            {visibleServices.slice(0, 6).map((s, i) => (
               <ServiceCard key={s.id ?? s.slug} service={s} index={i} />
             ))}
           </div>
@@ -49,13 +64,6 @@ export default function Home() {
 
       {/* TOP PRODUCTS */}
       <TopProducts />
-      
-
-
-      <Technologies />
-
-      {/* TOP PRODUCTS */}
-      {/* <TopProducts /> */}
 
       {/* ABOUT TEASER */}
       <AboutTeaserCarousel

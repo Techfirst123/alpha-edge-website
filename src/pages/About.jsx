@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBullseye, FaEye, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import PageHero from "../components/PageHero";
-import aboutHeroBg from "../assets/about/Alpha_Edge_logos.jpg";
+// Black 3D signage version of the logo — the flat banner lockup now lives on
+// the home hero, so About uses the dimensional treatment instead.
+import aboutHeroBg from "../assets/about/ae-logo-3d.jpg";
 import aboutEditorial from "../assets/about/editorial-team.webp";
 import { getAboutContent, getHomepageContent, getTeam } from "../api/client";
 import { placeholderAbout, placeholderHome, placeholderTeam } from "../data/placeholder";
@@ -45,10 +47,8 @@ export default function About() {
             <div className="about-editorial__frame">
               <img src={aboutEditorial} alt="Alpha Edge IT Services team at work" loading="lazy" />
             </div>
-            <div className="about-editorial__stat about-editorial__stat--top">
-              <span>{home.stats_years}+</span>
-              <small>Years Experience</small>
-            </div>
+            {/* The "Years Experience" badge that sat top-left has been
+                removed; only the Projects Delivered figure remains. */}
             <div className="about-editorial__stat about-editorial__stat--bottom">
               <span>{home.stats_projects}+</span>
               <small>Projects Delivered</small>

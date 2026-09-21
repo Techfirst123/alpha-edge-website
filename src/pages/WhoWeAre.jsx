@@ -10,9 +10,8 @@ import EditModal from "../components/EditModal";
 import "./WhoWeAre.css";
 
 const STATS = [
-  { n: "250+", label: "Projects delivered" },
-  { n: "120+", label: "Clients served" },
-  { n: "10+", label: "Years experience" },
+  { n: "50+", label: "Projects delivered" },
+  { n: "20+", label: "Clients served" },
   { n: "24/7", label: "Support cover" },
 ];
 

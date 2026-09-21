@@ -1,11 +1,11 @@
-// Fallback content shown if MongoDB is unreachable, and used as the initial
+//Fallback content shown if MongoDB is unreachable, and used as the initial
 // render before the API responds. Also the source data for `npm run seed`
 // (scripts/seed.js), which loads it into MongoDB Atlas — edit freely.
 
 export const placeholderSiteSettings = {
   site_name: "Alpha Edge IT Services Ltd",
   tagline: "Solutions. Technology. Growth.",
-  phone_primary: "+44 20 1234 5678",
+  phone_primary: "+44 7476 564673",
   email_primary: "info@alphaedgeitservices.co.uk",
   address_line1: "Office 20681",
   address_line2: "182-184 High Street North",
@@ -26,9 +26,11 @@ export const placeholderHome = {
     "Alpha Edge IT Services delivers enterprise-grade technology solutions — cloud, security, infrastructure and software — that drive real growth for your business.",
   hero_cta_text: "Get a Free Consultation",
   hero_cta_link: "/contact",
-  stats_projects: 250,
-  stats_clients: 120,
-  stats_years: 10,
+  stats_projects: 50,
+  stats_clients: 20,
+  // stats_years removed — the "Years of Experience" stat is no longer shown
+  // anywhere on the site. The field may still exist on saved records in the
+  // database; nothing reads it.
   stats_support: "24/7",
   about_teaser_heading: "Why Choose Alpha Edge?",
   about_teaser_text:
@@ -46,11 +48,8 @@ export const placeholderAbout = {
 
 export const placeholderServices = [
   { id: 1, title: "Cloud Solutions", slug: "cloud-solutions", icon: "cloud", short_description: "Migrate, manage and scale on the cloud with confidence." },
-  { id: 2, title: "Cybersecurity", slug: "cybersecurity", icon: "shield", short_description: "Protect your business with proactive, layered security." },
   { id: 3, title: "Managed IT Support", slug: "managed-it-support", icon: "support", short_description: "24/7 helpdesk and proactive IT management." },
   { id: 4, title: "Networking & Infrastructure", slug: "networking-infrastructure", icon: "network", short_description: "Robust networks built for performance and uptime." },
-  { id: 5, title: "Software Development", slug: "software-development", icon: "code", short_description: "Custom software that fits the way you work." },
-  { id: 6, title: "Data & Analytics", slug: "data-analytics", icon: "database", short_description: "Turn your data into actionable insight." },
 ];
 
 export const placeholderTestimonials = [
@@ -98,3 +97,4 @@ export const placeholderProducts = [
   { id: 18, category: "optic", category_label: "Optics, Cabling & Power", brand: "Tripp Lite", name: "Metered PDU 20A", model: "PDUMH20HVAT", short_description: "1U horizontal PDU, 12× C13, local current metering.", stock: "in", lead_time: "3–5 days" },
   { id: 19, category: "optic", category_label: "Optics, Cabling & Power", brand: "Panduit", name: "Cat6A 48-Port Patch Panel", model: "CPP48WBLY", short_description: "2U shielded feed-through panel, 48 ports, tool-less.", stock: "order", lead_time: "1–2 wks" },
 ];
+ 

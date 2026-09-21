@@ -1,34 +1,16 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
-import PageHero from "../components/PageHero";
-import ServiceExplorer from "../components/ServiceExplorer";
 import Technologies from "../components/Technologies";
-import { getServices } from "../api/client";
-import { placeholderServices } from "../data/placeholder";
 import "./Services.css";
 
+// The "IT Services Built Around Your Business" page hero and the six-item
+// ServiceExplorer accordion beneath it have been removed. What remains is the
+// supply/brands section and the closing CTA. Note this page is no longer
+// linked from the main navigation either (that slot is now "Products"), so
+// it's only reachable via a direct /services URL.
 export default function Services() {
-  const [services, setServices] = useState(placeholderServices);
-
-  useEffect(() => {
-    getServices().then((d) => d.length && setServices(d)).catch(() => setServices(placeholderServices));
-  }, []);
-
   return (
     <>
-      <PageHero
-        eyebrow="Our Services"
-        title="IT Services Built Around Your Business"
-        subtitle="Every engagement starts with understanding your goals — then we build the technology to match."
-      />
-
-      <section className="section section-alt">
-        <div className="container">
-          <ServiceExplorer services={services} />
-        </div>
-      </section>
-
       <Technologies />
 
       <section className="section services-cta">

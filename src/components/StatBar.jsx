@@ -55,7 +55,8 @@ export default function StatBar({ home }) {
   const stats = [
     { value: `${home.stats_projects}+`, label: "Projects Delivered" },
     { value: `${home.stats_clients}+`, label: "Happy Clients" },
-    { value: `${home.stats_years}+`, label: "Years of Experience" },
+    // "Years of Experience" intentionally removed — the company is newer than
+    // the figure implied, so it's no longer claimed anywhere on the site.
     { value: home.stats_support, label: "Support Availability" },
   ];
 

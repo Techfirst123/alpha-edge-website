@@ -10,10 +10,19 @@ if you use PNG, change the extension in src/components/Technologies.jsx):
 
   cisco.svg        hpe.svg          aruba.svg        dell.svg
   lenovo.svg       juniper.svg      fortinet.svg     palo-alto.svg
-  sophos.svg       huawei.svg       vmware.svg       ruckus.svg
-  extreme.svg      arista.svg       d-link.svg       tp-link.svg
-  hikvision.svg    dahua.svg        avaya.svg        polycom.svg
-  alcatel-lucent.svg   brocade.svg  samsung.svg      emc.svg
+  huawei.svg       vmware.svg       ruckus.svg       extreme.svg
+  arista.svg       d-link.svg       tp-link.svg      hikvision.svg
+  avaya.svg        polycom.svg      alcatel-lucent.svg   brocade.svg
+  samsung.svg      emc.svg          intel.svg        amd.svg
+  ibm.svg          mellanox.svg     nokia.svg        hitachi.svg
+
+STILL NEEDED: intel.svg, amd.svg, ibm.svg, mellanox.svg, nokia.svg and
+hitachi.svg. These six brands are already listed on the site and currently
+render as text. They were deliberately not drawn by hand — an approximated
+logo is worse than none, and these are trademarks that should come from the
+vendor's own brand page. Download the official SVG for each, save it here
+under the file name above, and it will appear on the next build with no code
+change.
 
 Tips
 - Use each vendor's official logo from their brand/press page or a reputable

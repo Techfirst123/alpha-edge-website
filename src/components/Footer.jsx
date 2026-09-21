@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { FaFacebookF, FaLinkedinIn, FaTwitter, FaInstagram, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import logo from "../assets/Alpha_Edge_logos.jpg";
+// Wide rectangular lockup (AE mark + wordmark), not the square badge.
+import logo from "../assets/alpha-edge-logo-wide.png";
 import "./Footer.css";
 
 export default function Footer({ settings }) {
@@ -37,16 +38,15 @@ export default function Footer({ settings }) {
           <h4>Quick Links</h4>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/about">About Us</NavLink>
-          <NavLink to="/services">Services</NavLink>
+          <NavLink to="/products">Products</NavLink>
           <NavLink to="/contact">Contact</NavLink>
         </div>
 
         <div className="footer__col">
           <h4>Services</h4>
           <span>Cloud Solutions</span>
-          <span>Cybersecurity</span>
           <span>Managed IT Support</span>
-          <span>Software Development</span>
+          <span>Networking &amp; Infrastructure</span>
         </div>
 
         <div className="footer__col">

@@ -2,7 +2,7 @@ import { getDb } from "../../_lib/mongodb.js";
 import { requireAdmin } from "../../_lib/auth.js";
 import { checkImageValue } from "../../_lib/handlers.js";
 import { toPages } from "../../_lib/adapter.js";
-
+ 
 const EDITABLE_TEXT_FIELDS = {
   category_label: 80,
   brand: 80,
@@ -10,28 +10,37 @@ const EDITABLE_TEXT_FIELDS = {
   model: 80,
   short_description: 300,
   lead_time: 40,
+  // Shown on the product card: comma-separated spec chips ("48, UPOE") and a
+  // short warranty line ("Warranty included"). Both are optional — a product
+  // with neither simply renders without them.
+  specs: 120,
+  warranty: 80,
 };
-
+ 
+// Condition badge on the card. Anything outside this list is stored as "",
+// which hides the badge rather than guessing New or Refurbished.
+const CONDITION_VALUES = new Set(["new", "refurb"]);
+ 
 const MAX_FEATURED_PRODUCTS = 10;
-
+ 
 // Admin edit/delete for a single product (by app-level `id`, not Mongo
 // `_id` — matches the id already assigned by the Excel importer). `category`
 // (the filter key) is intentionally not editable here — changing it would
 // silently move a product out of every existing category filter/icon
 // mapping on the Products page.
-
-
+ 
+ 
 const handler = requireAdmin(async (req, res) => {
   const db = await getDb();
   const products = db.collection("products");
-
+ 
   if (req.method === "PUT") {
-    const { id, stock, featured, image, ...rest } = req.body || {};
+    const { id, stock, featured, image, condition, ...rest } = req.body || {};
     const productId = Number(id);
     if (!Number.isFinite(productId)) {
       return res.status(400).json({ error: "A valid product id is required" });
     }
-
+ 
     const update = {};
     for (const [field, maxLength] of Object.entries(EDITABLE_TEXT_FIELDS)) {
       if (rest[field] !== undefined) {
@@ -40,6 +49,9 @@ const handler = requireAdmin(async (req, res) => {
     }
     if (stock !== undefined) {
       update.stock = stock === "order" ? "order" : "in";
+    }
+    if (condition !== undefined) {
+      update.condition = CONDITION_VALUES.has(condition) ? condition : "";
     }
     if (featured !== undefined) {
       update.featured = Boolean(featured);
@@ -51,17 +63,17 @@ const handler = requireAdmin(async (req, res) => {
         return res.status(400).json({ error: err.message });
       }
     }
-
+ 
     if (Object.keys(update).length === 0) {
       return res.status(400).json({ error: "No editable fields provided" });
     }
-
+ 
     try {
       const existing = await products.findOne({ id: productId }, { projection: { featured: 1 } });
       if (!existing) {
         return res.status(404).json({ error: "Product not found" });
       }
-
+ 
       // Only gate *newly* turning a product's Top 10 flag on — leaving an
       // already-featured product's other fields alone (or turning it off)
       // never needs this check.
@@ -73,10 +85,10 @@ const handler = requireAdmin(async (req, res) => {
           });
         }
       }
-
+ 
       update.updatedBy = req.admin.id;
       update.updatedAt = new Date();
-
+ 
       const result = await products.updateOne({ id: productId }, { $set: update });
       if (result.matchedCount === 0) {
         return res.status(404).json({ error: "Product not found" });
@@ -87,14 +99,14 @@ const handler = requireAdmin(async (req, res) => {
       return res.status(500).json({ error: "Failed to save product" });
     }
   }
-
+ 
   if (req.method === "DELETE") {
     const { id } = req.body || {};
     const productId = Number(id);
     if (!Number.isFinite(productId)) {
       return res.status(400).json({ error: "A valid product id is required" });
     }
-
+ 
     try {
       const result = await products.deleteOne({ id: productId });
       if (result.deletedCount === 0) {
@@ -106,9 +118,10 @@ const handler = requireAdmin(async (req, res) => {
       return res.status(500).json({ error: "Failed to delete product" });
     }
   }
-
+ 
   res.setHeader("Allow", "PUT, DELETE");
   return res.status(405).json({ error: "Method not allowed" });
 });
-
+ 
 export const onRequest = toPages(handler);
+ 
