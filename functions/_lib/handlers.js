@@ -50,6 +50,8 @@ export function listHandler(collectionName) {
         .collection(collectionName)
         .find({})
         .toArray();
+      // Admin-set display order first (services/team), then id.
+      docs.sort((a, b) => (a.order ?? a.id ?? 0) - (b.order ?? b.id ?? 0));
       return res.status(200).json(docs);
     } catch (err) {
       console.error(`Failed to load ${collectionName}:`, err);

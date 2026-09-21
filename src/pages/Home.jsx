@@ -30,7 +30,7 @@ export default function Home() {
   const visibleServices = services.filter((s) => !HIDDEN_SERVICE_SLUGS.has(s.slug));
 
   useEffect(() => {
-    getHomepageContent().then(setHome).catch(() => setHome(placeholderHome));
+    getHomepageContent().then((d) => setHome({ ...placeholderHome, ...d })).catch(() => setHome(placeholderHome));
     getServices().then((d) => d.length && setServices(d)).catch(() => setServices(placeholderServices));
   }, []);
 

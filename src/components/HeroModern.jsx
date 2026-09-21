@@ -17,11 +17,8 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import { getHeroSlides, adminUpdateHeroSlide } from "../api/client";
+import { getHeroSlides } from "../api/client";
 import { DEFAULT_SLIDES } from "../data/contentDefaults";
-import { useAdminAuth } from "../hooks/useAdminAuth";
-import EditIconButton from "./EditIconButton";
-import EditModal from "./EditModal";
 import "./HeroModern.css";
 
 // How long each slide stays up. Drives the CSS progress bar, which in turn
@@ -66,12 +63,10 @@ const FEATURE_CARDS = [
 ];
 
 export default function HeroModern({ ctaText = "Get a Free Consultation", ctaLink = "/contact" }) {
-  const { isAdmin } = useAdminAuth();
   const reduceMotion = useReducedMotion();
   const [slides, setSlides] = useState(DEFAULT_SLIDES);
   const [current, setCurrent] = useState(0);
   const [hovered, setHovered] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null);
   const [brokenImages, setBrokenImages] = useState(() => new Set());
   const sectionRef = useRef(null);
 
@@ -86,8 +81,8 @@ export default function HeroModern({ ctaText = "Get a Free Consultation", ctaLin
   const goPrev = () => goTo(current - 1);
 
   // Autoplay stops while the pointer rests on the feature cards / controls,
-  // while an admin is editing, and entirely for reduced-motion users.
-  const paused = hovered || editingIndex !== null || reduceMotion;
+  // and entirely for reduced-motion users.
+  const paused = hovered || reduceMotion;
 
   // --- Pointer parallax across the whole hero ------------------------------
   const px = useMotionValue(0); // -0.5 .. 0.5
@@ -117,7 +112,7 @@ export default function HeroModern({ ctaText = "Get a Free Consultation", ctaLin
   return (
     <section
       ref={sectionRef}
-      className={`hm ${isAdmin ? "editable-hover-target" : ""}`}
+      className="hm"
       onMouseMove={handleMove}
       onMouseLeave={resetPointer}
     >
@@ -172,9 +167,6 @@ export default function HeroModern({ ctaText = "Get a Free Consultation", ctaLin
         />
       )}
 
-      {isAdmin && (
-        <EditIconButton onClick={() => setEditingIndex(current)} label={`Edit slide ${current + 1}`} />
-      )}
 
       <div className="container hm__inner">
         {/* ---------- copy ---------- */}
@@ -349,26 +341,6 @@ export default function HeroModern({ ctaText = "Get a Free Consultation", ctaLin
         </div>
       </div>
 
-      {editingIndex !== null && (
-        <EditModal
-          folder="hero"
-          title={`Edit Slide ${editingIndex + 1}`}
-          fields={[
-            { name: "image", label: "Image", type: "image" },
-            { name: "eyebrow", label: "Eyebrow", type: "text", maxLength: 120 },
-            { name: "heading", label: "Heading", type: "text", maxLength: 160 },
-            { name: "subtitle", label: "Subtitle", type: "textarea", maxLength: 300 },
-          ]}
-          initialValues={slides[editingIndex]}
-          onClose={() => setEditingIndex(null)}
-          onSave={async (values) => {
-            const index = editingIndex;
-            await adminUpdateHeroSlide({ index, ...values });
-            setSlides((list) => list.map((s, i) => (i === index ? { ...s, ...values } : s)));
-            setCurrent(index);
-          }}
-        />
-      )}
     </section>
   );
 }

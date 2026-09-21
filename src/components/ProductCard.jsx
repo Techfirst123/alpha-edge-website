@@ -1,14 +1,11 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FaArrowRight, FaNetworkWired, FaServer, FaHdd, FaSitemap,
-  FaPlug, FaStream, FaPen, FaCheck,
+  FaPlug, FaStream, FaCheck,
 } from "react-icons/fa";
 
-import { adminUpdateProduct, adminDeleteProduct } from "../api/client";
 import { imageFor } from "../utils/productImage";
 import { availabilityLabel } from "../utils/productAvailability";
-import EditModal from "./EditModal";
 
 import "./ProductCard.css";
 
@@ -20,17 +17,6 @@ const CATEGORY_ICONS = {
   hub: FaSitemap,
   optic: FaPlug,
 };
-
-const STOCK_OPTIONS = [
-  { value: "in", label: "In stock" },
-  { value: "order", label: "On order" },
-];
-
-const CONDITION_OPTIONS = [
-  { value: "", label: "Not shown" },
-  { value: "new", label: "New" },
-  { value: "refurb", label: "Refurbished" },
-];
 
 const CONDITION_LABELS = { new: "New", refurb: "Refurb" };
 
@@ -44,8 +30,8 @@ function parseSpecs(raw) {
     .slice(0, 6);
 }
 
-export default function ProductCard({ product, isAdmin, onUpdated, onDeleted }) {
-  const [editing, setEditing] = useState(false);
+// Read-only product card — products are edited in the admin panel.
+export default function ProductCard({ product }) {
   const navigate = useNavigate();
 
   const Icon = CATEGORY_ICONS[product.category] || FaNetworkWired;
@@ -130,81 +116,20 @@ export default function ProductCard({ product, isAdmin, onUpdated, onDeleted }) 
 
         {description && <p className="product-card__desc">{description}</p>}
 
-        {isAdmin ? (
-          <div className="product-card__foot product-card__foot--admin">
-            <button
-              type="button"
-              className="btn btn-dark product-card__edit-btn"
-              onClick={(e) => {
-                // Stop the card's own click from opening Product Details.
-                e.stopPropagation();
-                setEditing(true);
-              }}
-            >
-              <FaPen />
-              Edit Product
-            </button>
-          </div>
-        ) : (
-          <div className="product-card__foot">
-            <button
-              type="button"
-              className="btn btn-primary product-card__cta"
-              onClick={(e) => {
-                e.stopPropagation();
-                navigate(quoteHref);
-              }}
-            >
-              Request Price
-              <FaArrowRight />
-            </button>
-          </div>
-        )}
-      </div>
-
-      {editing && (
-        <div onClick={(e) => e.stopPropagation()}>
-          <EditModal
-            folder="products"
-            title={`Edit ${product.name}`}
-            fields={[
-              { name: "image", label: "Photo", type: "image" },
-              { name: "name", label: "Product Name", type: "text", maxLength: 160 },
-              { name: "model", label: "Model / SKU", type: "text", maxLength: 80 },
-              { name: "brand", label: "Brand", type: "text", maxLength: 80 },
-              { name: "category_label", label: "Category Label", type: "text", maxLength: 80 },
-              { name: "short_description", label: "Short Description", type: "textarea", maxLength: 300 },
-              { name: "condition", label: "Condition badge", type: "select", options: CONDITION_OPTIONS },
-              { name: "specs", label: "Spec chips (comma separated, e.g. 48, UPOE)", type: "text", maxLength: 120 },
-              { name: "warranty", label: "Warranty line (e.g. Warranty included)", type: "text", maxLength: 80 },
-              { name: "stock", label: "Availability", type: "select", options: STOCK_OPTIONS },
-              { name: "featured", label: "Display on homepage (max 10)", type: "checkbox" },
-            ]}
-            initialValues={{
-              image: product.image || "",
-              name: product.name || "",
-              model: product.model || "",
-              brand: product.brand || "",
-              category_label: product.category_label || "",
-              short_description: product.short_description || "",
-              condition: product.condition || "",
-              specs: product.specs || "",
-              warranty: product.warranty || "",
-              stock: product.stock === "order" ? "order" : "in",
-              featured: Boolean(product.featured),
+        <div className="product-card__foot">
+          <button
+            type="button"
+            className="btn btn-primary product-card__cta"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(quoteHref);
             }}
-            onClose={() => setEditing(false)}
-            onSave={async (values) => {
-              await adminUpdateProduct({ id: product.id, ...values });
-              onUpdated?.({ ...product, ...values });
-            }}
-            onDelete={async () => {
-              await adminDeleteProduct(product.id);
-              onDeleted?.(product.id);
-            }}
-          />
+          >
+            Request Price
+            <FaArrowRight />
+          </button>
         </div>
-      )}
+      </div>
     </article>
   );
 }

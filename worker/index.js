@@ -10,7 +10,7 @@
 // everything else. SPA client-side routing fallback (unknown paths ->
 // index.html) is handled declaratively via `not_found_handling` in
 // wrangler.toml, not in this file.
- 
+
 import { onRequest as aboutContent } from "../functions/api/about-content.js";
 import { onRequest as contact } from "../functions/api/contact.js";
 import { onRequest as expertiseTiles } from "../functions/api/expertise-tiles.js";
@@ -26,7 +26,7 @@ import { onRequest as supplyCategories } from "../functions/api/supply-categorie
 import { onRequest as team } from "../functions/api/team.js";
 import { onRequest as track } from "../functions/api/track.js";
 import { onRequest as whoWeAreImages } from "../functions/api/who-we-are-images.js";
- 
+
 import { onRequest as adminAdmins } from "../functions/api/admin/admins.js";
 import { onRequest as adminAnalytics } from "../functions/api/admin/analytics.js";
 import { onRequest as adminExpertiseTiles } from "../functions/api/admin/expertise-tiles.js";
@@ -41,9 +41,13 @@ import { onRequest as adminRatings } from "../functions/api/admin/ratings.js";
 import { onRequest as adminSupplyCategories } from "../functions/api/admin/supply-categories.js";
 import { onRequest as adminUploadImage } from "../functions/api/admin/upload-image.js";
 import { onRequest as adminWhoWeAreImages } from "../functions/api/admin/who-we-are-images.js";
- 
+import { onRequest as adminContent } from "../functions/api/admin/content.js";
+import { onRequest as adminServices } from "../functions/api/admin/services.js";
+import { onRequest as adminTeam } from "../functions/api/admin/team.js";
+import { onRequest as adminLeads } from "../functions/api/admin/leads.js";
+
 import { onRequestGet as uploadsGet } from "../functions/uploads/[[path]].js";
- 
+
 // Exact-path routes (mirrors the flat file layout under functions/api/).
 const routes = {
   "/api/about-content": aboutContent,
@@ -75,8 +79,12 @@ const routes = {
   "/api/admin/supply-categories": adminSupplyCategories,
   "/api/admin/upload-image": adminUploadImage,
   "/api/admin/who-we-are-images": adminWhoWeAreImages,
+  "/api/admin/content": adminContent,
+  "/api/admin/services": adminServices,
+  "/api/admin/team": adminTeam,
+  "/api/admin/leads": adminLeads,
 };
- 
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -85,7 +93,7 @@ export default {
       url.pathname.length > 1 && url.pathname.endsWith("/")
         ? url.pathname.slice(0, -1)
         : url.pathname;
- 
+
     // R2-backed uploads catch-all: /uploads/<folder>/<filename>
     if (pathname === "/uploads" || pathname.startsWith("/uploads/")) {
       const path = pathname
@@ -99,7 +107,7 @@ export default {
         waitUntil: (p) => ctx.waitUntil(p),
       });
     }
- 
+
     const handler = routes[pathname];
     if (handler) {
       return handler({
@@ -109,7 +117,7 @@ export default {
         waitUntil: (p) => ctx.waitUntil(p),
       });
     }
- 
+
     // Everything else: serve the built static site. Unknown paths (client
     // router routes like /products/123) fall back to index.html via the
     // `not_found_handling = "single-page-application"` setting below.

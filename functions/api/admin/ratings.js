@@ -8,8 +8,23 @@ import { toPages } from "../../_lib/adapter.js";
 
 
 const handler = requireAdmin(async (req, res) => {
+  // Remove a review (spam, test entries) — DELETE { id }.
+  if (req.method === "DELETE") {
+    const id = Number(req.body?.id);
+    if (!Number.isFinite(id)) return res.status(400).json({ error: "A valid review id is required" });
+    try {
+      const db = await getDb();
+      const result = await db.collection("testimonials").deleteOne({ id });
+      if (result.deletedCount === 0) return res.status(404).json({ error: "Review not found" });
+      return res.status(200).json({ success: true });
+    } catch (err) {
+      console.error("Failed to delete review:", err);
+      return res.status(500).json({ error: "Failed to delete review" });
+    }
+  }
+
   if (req.method !== "GET") {
-    res.setHeader("Allow", "GET");
+    res.setHeader("Allow", "GET, DELETE");
     return res.status(405).json({ error: "Method not allowed" });
   }
 

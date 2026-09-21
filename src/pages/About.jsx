@@ -19,8 +19,8 @@ export default function About() {
   const [team, setTeam] = useState(placeholderTeam);
 
   useEffect(() => {
-    getAboutContent().then(setAbout).catch(() => setAbout(placeholderAbout));
-    getHomepageContent().then(setHome).catch(() => setHome(placeholderHome));
+    getAboutContent().then((d) => setAbout({ ...placeholderAbout, ...d })).catch(() => setAbout(placeholderAbout));
+    getHomepageContent().then((d) => setHome({ ...placeholderHome, ...d })).catch(() => setHome(placeholderHome));
     getTeam().then((d) => d.length && setTeam(d)).catch(() => setTeam(placeholderTeam));
   }, []);
 

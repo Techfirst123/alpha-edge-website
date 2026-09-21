@@ -2,11 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBalanceScale, FaClipboardCheck, FaShieldAlt, FaCertificate, FaArrowRight } from "react-icons/fa";
 import PageHero from "../components/PageHero";
-import { getWhoWeAreImages, adminUpdateWhoWeAreImage } from "../api/client";
+import { getWhoWeAreImages } from "../api/client";
 import { DEFAULT_APART_IMAGE, DEFAULT_CAPABILITY_IMAGES } from "../data/contentDefaults";
-import { useAdminAuth } from "../hooks/useAdminAuth";
-import EditIconButton from "../components/EditIconButton";
-import EditModal from "../components/EditModal";
 import "./WhoWeAre.css";
 
 const STATS = [
@@ -66,11 +63,8 @@ const CAPABILITIES = [
 ];
 
 export default function WhoWeAre() {
-  const { isAdmin } = useAdminAuth();
   const [apartImage, setApartImage] = useState(DEFAULT_APART_IMAGE);
   const [capabilityImages, setCapabilityImages] = useState(DEFAULT_CAPABILITY_IMAGES);
-  const [editingApart, setEditingApart] = useState(false);
-  const [editingCapability, setEditingCapability] = useState(null); // null | index
 
   useEffect(() => {
     getWhoWeAreImages()
@@ -140,9 +134,8 @@ export default function WhoWeAre() {
           </div>
 
           <div className="wwa-values__visual">
-            <div className={`wwa-values__frame ${isAdmin ? "editable-hover-target" : ""}`}>
+            <div className="wwa-values__frame">
               <img src={apartImage} alt="Alpha Edge engineer at work" loading="lazy" />
-              {isAdmin && <EditIconButton onClick={() => setEditingApart(true)} label="Edit this photo" />}
             </div>
             <span className="wwa-values__badge">
               <FaCertificate />
@@ -163,12 +156,9 @@ export default function WhoWeAre() {
           <div className="wwa-capabilities">
             {CAPABILITIES.map((c, i) => (
               <div className="wwa-capability" key={c.n}>
-                <div className={`wwa-capability__media ${isAdmin ? "editable-hover-target" : ""}`}>
+                <div className="wwa-capability__media">
                   <img src={capabilityImages[i]} alt={c.title} loading="lazy" />
                   <span className="wwa-capability__ghost">{c.n}</span>
-                  {isAdmin && (
-                    <EditIconButton onClick={() => setEditingCapability(i)} label={`Edit ${c.tag} photo`} />
-                  )}
                 </div>
                 <div className="wwa-capability__body">
                   <span className="wwa-capability__tag">{c.n} — {c.tag}</span>
@@ -199,33 +189,7 @@ export default function WhoWeAre() {
         </div>
       </section>
 
-      {editingApart && (
-        <EditModal
-          folder="whoweare"
-          title="Edit Photo"
-          fields={[{ name: "image", label: "Photo", type: "image" }]}
-          initialValues={{ image: apartImage }}
-          onClose={() => setEditingApart(false)}
-          onSave={async (values) => {
-            await adminUpdateWhoWeAreImage({ type: "apart", image: values.image });
-            setApartImage(values.image);
-          }}
-        />
-      )}
 
-      {editingCapability !== null && (
-        <EditModal
-          folder="whoweare"
-          title={`Edit ${CAPABILITIES[editingCapability].tag} Photo`}
-          fields={[{ name: "image", label: "Photo", type: "image" }]}
-          initialValues={{ image: capabilityImages[editingCapability] }}
-          onClose={() => setEditingCapability(null)}
-          onSave={async (values) => {
-            await adminUpdateWhoWeAreImage({ type: "capability", index: editingCapability, image: values.image });
-            setCapabilityImages((prev) => prev.map((p, idx) => (idx === editingCapability ? values.image : p)));
-          }}
-        />
-      )}
     </>
   );
 }

@@ -10,7 +10,7 @@ export default function Layout({ children }) {
 
   useEffect(() => {
     getSiteSettings()
-      .then(setSettings)
+      .then((d) => setSettings({ ...placeholderSiteSettings, ...d }))
       .catch(() => setSettings(placeholderSiteSettings));
   }, []);
 

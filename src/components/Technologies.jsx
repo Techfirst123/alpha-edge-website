@@ -4,11 +4,8 @@ import {
   FaNetworkWired, FaStream, FaShieldAlt, FaWifi, FaServer,
   FaHdd, FaMicrochip, FaPhoneAlt, FaArrowRight,
 } from "react-icons/fa";
-import { getSupplyCategories, adminUpdateSupplyCategories } from "../api/client";
+import { getSupplyCategories } from "../api/client";
 import { DEFAULT_CATEGORIES } from "../data/contentDefaults";
-import { useAdminAuth } from "../hooks/useAdminAuth";
-import EditIconButton from "./EditIconButton";
-import SupplyCategoriesModal from "./SupplyCategoriesModal";
 import "./Technologies.css";
 
 // Icons are assigned by rotation (not chosen per item) so admin-added
@@ -141,9 +138,7 @@ function BrandTile({ brand, index }) {
 }
 
 export default function Technologies() {
-  const { isAdmin } = useAdminAuth();
   const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
-  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     getSupplyCategories()
@@ -152,8 +147,7 @@ export default function Technologies() {
   }, []);
 
   return (
-    <section className={`section vendors ${isAdmin ? "editable-hover-target" : ""}`}>
-      {isAdmin && <EditIconButton onClick={() => setEditing(true)} label="Edit What We Supply" />}
+    <section className="section vendors">
       <div className="container">
         <span className="eyebrow">What We Supply</span>
         <h2 className="section-heading">Everything Your Network Runs On</h2>
@@ -185,16 +179,6 @@ export default function Technologies() {
         </div>
       </div>
 
-      {editing && (
-        <SupplyCategoriesModal
-          initialCategories={categories}
-          onClose={() => setEditing(false)}
-          onSave={async (newCategories) => {
-            await adminUpdateSupplyCategories(newCategories);
-            setCategories(newCategories);
-          }}
-        />
-      )}
     </section>
   );
 }

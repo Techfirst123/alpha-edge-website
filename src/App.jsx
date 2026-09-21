@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AdminAuthProvider } from "./context/AdminAuthContext";
 import Layout from "./components/Layout";
@@ -9,12 +10,14 @@ import Services from "./pages/Services";
 import Products from "./pages/Products";
 import Contact from "./pages/Contact";
 import GetQuote from "./pages/GetQuote";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 import ProductDetail from "./pages/ProductDetail";
 import Reviews from "./pages/Reviews";
+
+// The admin panel is a separate app, loaded only when someone visits /admin
+// — public visitors never download it.
+const AdminApp = lazy(() => import("./admin/AdminApp"));
 
 export default function App() {
   return (
@@ -23,9 +26,15 @@ export default function App() {
         <ScrollToTop />
         <VisitorTracker />
         <Routes>
-          <Route path="/admin/login" element={<Login />} />
-          {/* No Navbar/Footer here — the dashboard is its own admin-only screen. */}
-          <Route path="/admin/dashboard" element={<Dashboard />} />
+          {/* Separate admin panel — own layout, no public navbar/footer. */}
+          <Route
+            path="/admin/*"
+            element={
+              <Suspense fallback={null}>
+                <AdminApp />
+              </Suspense>
+            }
+          />
           <Route
             path="*"
             element={

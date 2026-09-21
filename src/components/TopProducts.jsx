@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import { imageFor } from "../utils/productImage";
-import { useAdminAuth } from "../hooks/useAdminAuth";
 import { getProducts } from "../api/client";
 import { placeholderProducts } from "../data/placeholder";
 import "./TopProducts.css";
@@ -16,7 +15,6 @@ function pickHomepageProducts(products) {
 }
 
 export default function TopProducts() {
-  const { isAdmin } = useAdminAuth();
   const [products, setProducts] = useState(placeholderProducts);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -31,7 +29,7 @@ export default function TopProducts() {
   // Duplicate products so the slider can loop continuously
   const sliderProducts = [...picks, ...picks];
 
-  if (picks.length === 0 && !isAdmin) return null;
+  if (picks.length === 0) return null;
 
   return (
     <section className="section section-alt top-products">

@@ -2,12 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import {
   FaSearch,
-  FaSignOutAlt,
-  FaTachometerAlt,
   FaChevronDown,
 } from "react-icons/fa";
 
-import { useAdminAuth } from "../hooks/useAdminAuth";
 import { placeholderProductCategories } from "../data/placeholder";
 import logo from "../assets/Alpha_Edge_logos.jpg";
 
@@ -35,7 +32,6 @@ export default function Navbar() {
 
   const navigate = useNavigate();
 
-  const { isAdmin, logout } = useAdminAuth();
 
   const servicesRef = useRef(null);
 
@@ -130,19 +126,6 @@ export default function Navbar() {
   };
 
 
-  /* =========================================================
-     LOGOUT
-  ========================================================= */
-
-  const handleLogout = async () => {
-
-    await logout();
-
-    closeMenus();
-
-    navigate("/");
-
-  };
 
 
   return (
@@ -378,42 +361,6 @@ export default function Navbar() {
             Get a Quote
           </NavLink>
 
-
-          {/* =================================================
-              ADMIN
-          ================================================= */}
-
-          {isAdmin && (
-
-            <>
-
-              <NavLink
-                to="/admin/dashboard"
-                className={({ isActive }) =>
-                  `navbar__link ${
-                    isActive
-                      ? "navbar__link--active"
-                      : ""
-                  }`
-                }
-                onClick={closeMenus}
-              >
-                {/* <FaTachometerAlt /> Dashboard */}
-              </NavLink>
-
-
-              <button
-                type="button"
-                className="navbar__auth-btn"
-                onClick={handleLogout}
-              >
-                <FaSignOutAlt />
-                Log Out
-              </button>
-
-            </>
-
-          )}
 
         </nav>
 

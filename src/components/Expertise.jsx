@@ -3,11 +3,8 @@ import {
   FaNetworkWired, FaMicrochip, FaShippingFast,
   FaTachometerAlt, FaAward, FaHeadset,
 } from "react-icons/fa";
-import { getExpertiseTiles, adminUpdateExpertiseTile } from "../api/client";
+import { getExpertiseTiles } from "../api/client";
 import { DEFAULT_EXPERTISE_IMAGES } from "../data/contentDefaults";
-import { useAdminAuth } from "../hooks/useAdminAuth";
-import EditIconButton from "./EditIconButton";
-import EditModal from "./EditModal";
 import "./Expertise.css";
 
 /* Drop real photos into public/expertise/ using these file names to replace the
@@ -52,11 +49,11 @@ const TILES = [
   },
 ];
 
-function ExpertiseTile({ tile, isAdmin, onEdit }) {
+function ExpertiseTile({ tile }) {
   const [hasImg, setHasImg] = useState(true);
   const Icon = tile.icon;
   return (
-    <article className={`exp-tile ${hasImg ? "" : "exp-tile--placeholder"} ${isAdmin ? "editable-hover-target" : ""}`}>
+    <article className={`exp-tile ${hasImg ? "" : "exp-tile--placeholder"}`}>
       {hasImg && (
         <img
           className="exp-tile__img"
@@ -74,15 +71,12 @@ function ExpertiseTile({ tile, isAdmin, onEdit }) {
         <h3 className="exp-tile__title">{tile.title}</h3>
         <p className="exp-tile__text">{tile.text}</p>
       </div>
-      {isAdmin && <EditIconButton onClick={onEdit} label={`Edit ${tile.title} photo`} />}
     </article>
   );
 }
 
 export default function Expertise() {
-  const { isAdmin } = useAdminAuth();
   const [images, setImages] = useState(DEFAULT_EXPERTISE_IMAGES);
-  const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
     getExpertiseTiles()
@@ -101,27 +95,12 @@ export default function Expertise() {
           {TILES.map((tile, i) => (
             <ExpertiseTile
               tile={{ ...tile, img: images[i] || tile.img }}
-              isAdmin={isAdmin}
-              onEdit={() => setEditingIndex(i)}
               key={tile.title}
             />
           ))}
         </div>
       </div>
 
-      {editingIndex !== null && (
-        <EditModal
-          folder="expertise"
-          title={`Edit ${TILES[editingIndex].title} Photo`}
-          fields={[{ name: "image", label: "Photo", type: "image" }]}
-          initialValues={{ image: images[editingIndex] }}
-          onClose={() => setEditingIndex(null)}
-          onSave={async (values) => {
-            await adminUpdateExpertiseTile(editingIndex, values.image);
-            setImages((prev) => prev.map((p, idx) => (idx === editingIndex ? values.image : p)));
-          }}
-        />
-      )}
     </section>
   );
 }

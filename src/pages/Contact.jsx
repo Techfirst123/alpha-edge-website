@@ -13,7 +13,7 @@ export default function Contact() {
   const [status, setStatus] = useState("idle"); // idle | submitting | success | error
 
   useEffect(() => {
-    getSiteSettings().then(setSettings).catch(() => setSettings(placeholderSiteSettings));
+    getSiteSettings().then((d) => setSettings({ ...placeholderSiteSettings, ...d })).catch(() => setSettings(placeholderSiteSettings));
   }, []);
 
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));

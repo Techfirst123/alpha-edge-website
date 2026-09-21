@@ -28,6 +28,9 @@ function ids() {
 // Records anonymous page views + time-on-site for the admin-only /details
 // report — only once the visitor has accepted cookies. No personal data:
 // just a random id per browser and per browser-session.
+// Admin panel pages are never counted as visits.
+const isAdminPath = (path) => path === "/admin" || path.startsWith("/admin/");
+
 export default function useVisitorTracking() {
   const location = useLocation();
   const pathRef = useRef(location.pathname);
@@ -37,7 +40,7 @@ export default function useVisitorTracking() {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (getCookieConsent() !== "accepted") return;
+    if (getCookieConsent() !== "accepted" || isAdminPath(location.pathname)) return;
     const { visitorId, sessionId } = ids();
     trackEvent({
       type: "pageview",
@@ -50,7 +53,7 @@ export default function useVisitorTracking() {
 
   useEffect(() => {
     const sendPageview = () => {
-      if (getCookieConsent() !== "accepted") return;
+      if (getCookieConsent() !== "accepted" || isAdminPath(pathRef.current)) return;
       const { visitorId, sessionId } = ids();
       trackEvent({
         type: "pageview",
@@ -69,7 +72,7 @@ export default function useVisitorTracking() {
   useEffect(() => {
     const ping = () => {
       if (document.visibilityState !== "visible") return;
-      if (getCookieConsent() !== "accepted") return;
+      if (getCookieConsent() !== "accepted" || isAdminPath(pathRef.current)) return;
       const { visitorId, sessionId } = ids();
       trackEvent({ type: "heartbeat", sessionId, visitorId, path: pathRef.current }).catch(() => {});
     };

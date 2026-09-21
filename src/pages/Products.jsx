@@ -11,14 +11,11 @@ import {
   FaSearch,
   FaTimes,
   FaCheckCircle,
-  FaFileExcel,
 } from "react-icons/fa";
 
 import PageHero from "../components/PageHero";
-import ImportProductsModal from "../components/ImportProductsModal";
 import ProductCard from "../components/ProductCard";
 
-import { useAdminAuth } from "../hooks/useAdminAuth";
 import { getProducts } from "../api/client";
 
 import {
@@ -45,8 +42,6 @@ const labelFor = (key) =>
 
 export default function Products() {
 
-  const { isAdmin } = useAdminAuth();
-
   const { categorySlug } = useParams();
 
   const navigate = useNavigate();
@@ -66,11 +61,6 @@ export default function Products() {
   const [query, setQuery] =
     useState(searchParams.get("q") || "");
 
-  const [showImport, setShowImport] =
-    useState(false);
-
-  const [homepageOnly, setHomepageOnly] =
-    useState(false);
 
 
   /* =========================================================
@@ -158,16 +148,6 @@ export default function Products() {
       }
 
 
-      /* HOMEPAGE FILTER — ADMIN ONLY */
-
-      if (
-        homepageOnly &&
-        !p.featured
-      ) {
-        return false;
-      }
-
-
       /* SEARCH */
 
       if (!q) {
@@ -187,7 +167,6 @@ export default function Products() {
     products,
     category,
     query,
-    homepageOnly,
   ]);
 
 
@@ -298,57 +277,8 @@ export default function Products() {
             </div>
 
 
-            {/* =================================================
-                ADMIN IMPORT
-            ================================================= */}
-
-            {isAdmin && (
-
-              <button
-                type="button"
-                className="products-import-btn"
-
-                onClick={() =>
-                  setShowImport(true)
-                }
-              >
-
-                <FaFileExcel />
-
-                Import from Excel
-
-              </button>
-
-            )}
-
           </div>
 
-
-          {/* =================================================
-              ADMIN HOMEPAGE FILTER
-          ================================================= */}
-
-          {isAdmin && (
-
-            <label className="products-homepage-filter">
-
-              <input
-                type="checkbox"
-                checked={homepageOnly}
-
-                onChange={(e) =>
-                  setHomepageOnly(
-                    e.target.checked
-                  )
-                }
-              />
-
-              Show only products marked
-              &ldquo;Display on homepage&rdquo;
-
-            </label>
-
-          )}
 
 
           {/* =================================================
@@ -497,46 +427,12 @@ export default function Products() {
                 <ProductCard
                   product={p}
 
-                  isAdmin={isAdmin}
-
                   key={
                     p.id ??
                     p._id ??
                     p.model
                   }
 
-
-                  /* =========================================
-                     PRODUCT UPDATED
-                  ========================================= */
-
-                  onUpdated={(updated) => {
-
-                    setProducts((prev) =>
-                      prev.map((item) =>
-                        item.id === updated.id
-                          ? updated
-                          : item
-                      )
-                    );
-
-                  }}
-
-
-                  /* =========================================
-                     PRODUCT DELETED
-                  ========================================= */
-
-                  onDeleted={(id) => {
-
-                    setProducts((prev) =>
-                      prev.filter(
-                        (item) =>
-                          item.id !== id
-                      )
-                    );
-
-                  }}
 
                 />
 
@@ -550,24 +446,6 @@ export default function Products() {
 
       </section>
 
-
-      {/* =====================================================
-          IMPORT MODAL
-      ===================================================== */}
-
-      {showImport && (
-
-        <ImportProductsModal
-          onClose={() =>
-            setShowImport(false)
-          }
-
-          onImported={
-            refreshProducts
-          }
-        />
-
-      )}
 
 
       {/* =====================================================
