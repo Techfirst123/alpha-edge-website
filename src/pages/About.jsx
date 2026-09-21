@@ -11,7 +11,8 @@ import "./About.css";
 // the home hero, so About uses the dimensional treatment instead.
 // Served from public/about/ as a plain URL rather than imported, so the build
 // never depends on resolving this file (it's copied into dist/ as-is).
-const aboutHeroBg = "/about/ae-logo-3d.jpg";
+// const aboutHeroBg = "/about/ae-logo-3d.jpg";
+import aboutHeroBg from "../assets/about/ae-logo-3d.jpg";
 
 export default function About() {
   const [about, setAbout] = useState(placeholderAbout);
