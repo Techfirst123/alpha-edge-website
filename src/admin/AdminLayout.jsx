@@ -25,6 +25,13 @@ import { useAdminAuth } from "../hooks/useAdminAuth";
 import { getLeads } from "./api";
 import logo from "../assets/Alpha_Edge_logos.jpg";
 
+// On admin.<domain> the public site lives on www.<domain>; elsewhere
+// (localhost, workers.dev) it's the same host.
+const publicSiteUrl = () => {
+  const h = typeof window !== "undefined" ? window.location.hostname : "";
+  return h.startsWith("admin.") ? `https://www.${h.slice(6)}/` : "/";
+};
+
 // Sidebar sections. `super: true` items are only shown to Super Admins.
 const NAV = [
   {
@@ -163,7 +170,7 @@ export default function AdminLayout() {
           <span className="adm-top__hint">
             <FaUsers aria-hidden="true" /> Changes save to the database and appear on the live website straight away.
           </span>
-          <a className="adm-btn adm-btn--ghost" href="/" target="_blank" rel="noreferrer">
+          <a className="adm-btn adm-btn--ghost" href={publicSiteUrl()} target="_blank" rel="noreferrer">
             <FaExternalLinkAlt /> View website
           </a>
         </header>

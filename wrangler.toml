@@ -2,7 +2,21 @@ name = "alpha-edge-website1"
 main = "worker/index.js"
 compatibility_date = "2025-09-01"
 compatibility_flags = ["nodejs_compat"]
-# ...
+
+# Your domains. `wrangler deploy` attaches them to this Worker and Cloudflare
+# creates the DNS records + SSL certificates automatically.
+#   www.alphaedgeitservices.co.uk   -> public website
+#   alphaedgeitservices.co.uk       -> redirects to www
+#   admin.alphaedgeitservices.co.uk -> admin panel
+routes = [
+  { pattern = "www.alphaedgeitservices.co.uk", custom_domain = true },
+  { pattern = "alphaedgeitservices.co.uk", custom_domain = true },
+  { pattern = "admin.alphaedgeitservices.co.uk", custom_domain = true },
+]
+
+[vars]
+SITE_DOMAIN = "alphaedgeitservices.co.uk"
+
 [observability.logs]
 enabled = true
 head_sampling_rate = 1
@@ -13,14 +27,14 @@ persist = true
 enabled = true
 head_sampling_rate = 1
 persist = true
-# ...
-
 
 [assets]
 directory = "./dist"
 binding = "ASSETS"
 not_found_handling = "single-page-application"
-run_worker_first = ["/api/*", "/uploads/*"]
+# The Worker runs first for every request so it can handle the domain
+# redirects (bare domain -> www, admin sub-domain) before serving pages.
+run_worker_first = true
 
 [[r2_buckets]]
 binding = "UPLOADS_BUCKET"

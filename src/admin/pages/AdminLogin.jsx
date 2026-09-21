@@ -4,6 +4,13 @@ import { FaArrowRight, FaEnvelope, FaLock, FaSpinner } from "react-icons/fa";
 import { useAdminAuth } from "../../hooks/useAdminAuth";
 import logo from "../../assets/Alpha_Edge_logos.jpg";
 
+// On admin.<domain> the public site lives on www.<domain>; elsewhere
+// (localhost, workers.dev) it's the same host.
+const publicSiteUrl = () => {
+  const h = typeof window !== "undefined" ? window.location.hostname : "";
+  return h.startsWith("admin.") ? `https://www.${h.slice(6)}/` : "/";
+};
+
 export default function AdminLogin() {
   const { isAdmin, ready, login } = useAdminAuth();
   const navigate = useNavigate();
@@ -76,7 +83,7 @@ export default function AdminLogin() {
           {loading ? "Signing in…" : "Sign in"} {!loading && <FaArrowRight />}
         </button>
 
-        <a href="/" className="adm-login__back">← Back to website</a>
+        <a href={publicSiteUrl()} className="adm-login__back">← Back to website</a>
       </form>
     </div>
   );

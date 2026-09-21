@@ -85,9 +85,49 @@ const routes = {
   "/api/admin/leads": adminLeads,
 };
 
+// ---------------------------------------------------------------------------
+// Domains
+//   https://www.<SITE_DOMAIN>     -> public website
+//   https://<SITE_DOMAIN>         -> 301 to www
+//   https://admin.<SITE_DOMAIN>   -> admin panel (opens straight on /admin)
+// SITE_DOMAIN is set in wrangler.toml [vars]. On *.workers.dev (or any other
+// host) none of this applies and the site works exactly as before.
+// ---------------------------------------------------------------------------
+const isAppPath = (p) =>
+  p === "/admin" || p.startsWith("/admin/") || p.startsWith("/api/") || p.startsWith("/uploads/");
+const isStaticFile = (p) => p.startsWith("/assets/") || /\.[a-z0-9]{2,5}$/i.test(p);
+
+function domainRedirect(url, env) {
+  const site = (env.SITE_DOMAIN || "").toLowerCase();
+  if (!site) return null;
+  const host = url.hostname.toLowerCase();
+  const www = `www.${site}`;
+  const admin = `admin.${site}`;
+  const to = (h, path) => Response.redirect(`https://${h}${path}${url.search}`, 301);
+
+  // bare domain -> www
+  if (host === site) return to(www, url.pathname);
+
+  // admin sub-domain: only the admin panel (+ its API, uploads, static files)
+  if (host === admin) {
+    if (url.pathname === "/" || url.pathname === "") return Response.redirect(`https://${admin}/admin`, 302);
+    if (!isAppPath(url.pathname) && !isStaticFile(url.pathname)) return to(www, url.pathname);
+    return null;
+  }
+
+  // public site: send anyone typing /admin over to the admin sub-domain
+  if (host === www && (url.pathname === "/admin" || url.pathname.startsWith("/admin/"))) {
+    return to(admin, url.pathname);
+  }
+  return null;
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+
+    const redirect = domainRedirect(url, env);
+    if (redirect) return redirect;
     // Normalize away a single trailing slash (but keep "/" itself).
     const pathname =
       url.pathname.length > 1 && url.pathname.endsWith("/")
@@ -121,6 +161,13 @@ export default {
     // Everything else: serve the built static site. Unknown paths (client
     // router routes like /products/123) fall back to index.html via the
     // `not_found_handling = "single-page-application"` setting below.
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+    // Keep the admin sub-domain out of search engines.
+    if (env.SITE_DOMAIN && url.hostname.toLowerCase() === `admin.${env.SITE_DOMAIN.toLowerCase()}`) {
+      const out = new Response(res.body, res);
+      out.headers.set("X-Robots-Tag", "noindex, nofollow");
+      return out;
+    }
+    return res;
   },
 };
